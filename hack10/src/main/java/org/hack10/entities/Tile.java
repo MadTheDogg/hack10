@@ -11,14 +11,12 @@ public class Tile{
     private BufferedImage image;
     private BufferedImage hitbox;//white and black image for hitbox - white is allowed, black is not - no racial motivations
     private Entity[][] interactables;
-    private Context context;
 
     //constructor
-    public Tile(Context context){
+    public Tile(){
         this.image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
         this.hitbox = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_BINARY);
         this.interactables = new Entity[32][32];
-        this.context = context;
     }
 
     //getters
@@ -50,8 +48,8 @@ public class Tile{
     public void addInteractable(Entity entity, int x, int y){
         this.interactables[x][y] = entity;
     }
-    public Boolean canBeTravelled(){
-        Position playerCollision = context.getGameState().getBoat().getHitbox();
+    public Boolean canBeTravelled(Context context){
+        Rectangle playerCollision = context.getGameState().getBoat().getHitbox();
         int [] hitboxColours = hitbox.getRGB(playerCollision.x, playerCollision.y, playerCollision.width, playerCollision.height, null, 0, playerCollision.width);
         for(int colour : hitboxColours){
             if(colour == -16777216){//black ????????????????????????????
