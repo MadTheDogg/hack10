@@ -1,7 +1,7 @@
 package org.hack10.entities;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.nio.Buffer;
 import org.hack10.gamestate.*;
 import java.awt.Rectangle;
 import javax.imageio.ImageIO;
@@ -67,5 +67,13 @@ public class Tile{
                 }
             }
         }return true;
+    }
+    public Boolean isEnd(Context context){//checks if it is the end of the tile aka move to next one
+        Rectangle playerCollision = context.getGameState().getBoat().getHitbox();
+        if (image.getWidth()<(playerCollision.x+playerCollision.getWidth())){//if top right of hitbox is left of boat aka boat is in next tile
+            return true;
+        }else{
+            return false;
+        }
     }
 }

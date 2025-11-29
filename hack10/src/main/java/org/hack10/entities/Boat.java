@@ -3,12 +3,11 @@ package org.hack10.entities;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
 
-import java.awt.image.BufferedImage;
-import java.awt.Rectangle;
+
 
 public class Boat extends Entity {
     private Position pos;
-
+    private double angle;
     //Constructor
     public Boat(Position position)
     {
@@ -24,6 +23,12 @@ public class Boat extends Entity {
     //Getters
     public Position getPos() { return pos; }
 
-    //Setters
+    //movers
     public void move() { pos = new Position(pos.x, pos.y - 1); } 
+    
+    public void angleMove(){
+        int xChange= (int) Math.cos(angle);
+        int yChange= (int) Math.sin(angle);
+        pos = new Position(pos.x + xChange, pos.y + yChange);
+    }
 }

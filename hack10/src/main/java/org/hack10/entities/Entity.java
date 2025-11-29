@@ -1,4 +1,5 @@
 package org.hack10.entities;
+
 import java.awt.image.BufferedImage;
 import java.awt.Rectangle;
 
