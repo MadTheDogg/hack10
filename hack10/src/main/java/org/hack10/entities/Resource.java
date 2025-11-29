@@ -1,21 +1,34 @@
 package org.hack10.entities;
 
+import java.io.File;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import javax.imageio.ImageIO;
 
-public class Monster extends Entity {
-    private int health;
-    private int damage;
+
+public class Resource extends Entity {
+    private String resourceType;
+    private int quantity;
     private Position position;
 
-    public Monster(int health, int damage, Position position) {
-        this.health=health;
-        this.damage=damage;
+    public Resource(String resourceType, int quantity,Position position) {
+        this.resourceType = resourceType;
+        this.quantity = quantity;
         this.position=position;
-    }        
+    }
+
+    public String getResourceType() {
+        return resourceType;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
     public void setImageAndHitbox(String filePath) {
         try{
         BufferedImage image = ImageIO.read(new File(filePath));
@@ -25,4 +38,5 @@ public class Monster extends Entity {
             System.err.println("Error loading Resource image: " + e.getMessage());
         }
     }
+    
 }

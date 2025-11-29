@@ -48,12 +48,12 @@ public class Tile{
     public void addInteractable(Entity entity, int x, int y){
         this.interactables[x][y] = entity;
     }
-    public Boolean canBeTravelled(Context context){
+    public Integer canBeTravelled(Context context){//-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
         Rectangle playerCollision = context.getGameState().getBoat().getHitbox();
         int [] hitboxColours = hitbox.getRGB(playerCollision.x, playerCollision.y, playerCollision.width, playerCollision.height, null, 0, playerCollision.width);
         for(int colour : hitboxColours){
-            if(colour == -16777216){//black ????????????????????????????
-                return false;
+            if(colour == -16777216){//black ??? - does it go that high?
+                return -1;
             }
         }   
         for (int i=0;i<interactables.length;i++){//check if boat hitbox hits an interactable hitbox
@@ -62,11 +62,18 @@ public class Tile{
                 if(entity != null){
                     Rectangle entityHitbox = entity.getHitbox();
                     if(playerCollision.intersects(entityHitbox)){
-                        return false;
+                        //change based on entity type;;
+                        if(entity instanceof Monster){
+                            return 1;
+                        }else if(entity instanceof Resource){
+                            return 2;
+                        }else if(entity instanceof TradingOutpost){
+                            return 3; 
+                        }
                     }
                 }
             }
-        }return true;
+        }return 0;
     }
     public Boolean isEnd(Context context){//checks if it is the end of the tile aka move to next one
         Rectangle playerCollision = context.getGameState().getBoat().getHitbox();

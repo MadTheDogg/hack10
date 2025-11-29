@@ -1,21 +1,21 @@
 package org.hack10.entities;
 
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
 
-public class Monster extends Entity {
-    private int health;
-    private int damage;
+public class TradingOutpost extends Entity {
     private Position position;
 
-    public Monster(int health, int damage, Position position) {
-        this.health=health;
-        this.damage=damage;
-        this.position=position;
-    }        
+    public TradingOutpost(Position position) {
+        this.position = position;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
     public void setImageAndHitbox(String filePath) {
         try{
         BufferedImage image = ImageIO.read(new File(filePath));
