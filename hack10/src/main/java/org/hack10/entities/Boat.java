@@ -1,12 +1,13 @@
 package org.hack10.entities;
 
-public class Boat {
+public class Boat extends Entity {
     private Position pos;
 
     //Constructor
     public Boat(Position position)
     {
         pos = position;
+        
     }
 
     //Getters
