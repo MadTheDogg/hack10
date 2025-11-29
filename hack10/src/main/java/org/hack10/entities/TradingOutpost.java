@@ -19,13 +19,14 @@ public class TradingOutpost extends Entity {
     }
     public void setPosition(Position position) {
         this.position = position;
+        this.hitbox.setLocation(position.x, position.y);
     }
 
     public void setImageAndHitbox(String filePath) {
         try{
         BufferedImage image = ImageIO.read(new File(filePath));
         this.image = image;
-        this.hitbox = new Rectangle(position.x,position.y,image.getWidth(),image.getHeight());
+        this.hitbox = new Rectangle(-100,-100,image.getWidth(),image.getHeight());//0,0 used for now
         }catch(Exception e){
             System.err.println("Error loading Resource image: " + e.getMessage());
         }
