@@ -2,7 +2,23 @@
     [
         {
             "imagePath":"/org/hack10/landscape1.png",
-            "hitboxPath":"/org/hack10/landscape1.png"
+            "hitboxPath":"/org/hack10/landscape1-hitbox.png"
+        },
+        {
+            "imagePath":"/org/hack10/landscape2.png",
+            "hitboxPath":"/org/hack10/landscape2-hitbox.png"
+        },
+        {
+            "imagePath":"/org/hack10/landscape3.png",
+            "hitboxPath":"/org/hack10/landscape3-hitbox.png"
+        },
+        {
+            "imagePath":"/org/hack10/landscape4.png",
+            "hitboxPath":"/org/hack10/landscape4-hitbox.png"
+        },
+        {
+            "imagePath":"/org/hack10/landscape5.png",
+            "hitboxPath":"/org/hack10/landscape5-hitbox.png"
         }
     ],
     [
