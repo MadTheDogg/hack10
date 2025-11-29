@@ -8,9 +8,11 @@ public class Map {
 
     private List<Tile> map, possibleTiles;
     private Random generator;
+    private Tile currentTile;
 
     public Map() {
         map = new ArrayList<>();
+        currentTile = null;
 
         possibleTiles = new ArrayList<>();
         readPossibleTiles(Map.class.getResourceAsStream("/org/hack10/config/Tiles.txt"));
@@ -47,7 +49,13 @@ public class Map {
     }
 
     private void calcNextTile() {
+        //Randomly generate a number to select from the tile calculation array
         int tileNum = generator.nextInt(1);
+        currentTile = possibleTiles.get(tileNum);
+    }
 
+    //Getters
+    public Tile getCurrentTile() {
+        return currentTile;
     }
 }
