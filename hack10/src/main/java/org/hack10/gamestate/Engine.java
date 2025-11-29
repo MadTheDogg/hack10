@@ -1,13 +1,13 @@
 package org.hack10.gamestate;
 
-import org.hack10.*;
+import org.hack10.entities.*;
 
 public class Engine {
     private Context currentContext;
     private GameState currentGameState;
 
     public Engine() {
-        currentGameState = new GameState();
         currentContext = new Context(this, currentGameState);
+        currentGameState = new GameState(new Map(currentContext));        
     }
 }

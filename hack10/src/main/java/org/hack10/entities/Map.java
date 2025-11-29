@@ -1,57 +1,29 @@
 package org.hack10.entities;
 
-import org.hack10.*;
+import org.hack10.gamestate.*;
 import java.util.*;
 import java.io.*;
 
 public class Map {
 
-    private List<Tile> map, possibleTiles;
+    private Context context;
+    private List<Tile> map;
     private Random generator;
     private Tile currentTile;
 
-    public Map() {
+    public Map(Context context) {
+        this.context = context;
+        calcNextTile(context);
+
         map = new ArrayList<>();
-        currentTile = null;
-
-        possibleTiles = new ArrayList<>();
-        readPossibleTiles(Map.class.getResourceAsStream("/org/hack10/config/Tiles.txt"));
-
         generator = new Random();
     }
 
-    private void readPossibleTiles(InputStream stream) {
-        try {
-            //Reading the intial tile path file, taking all subsequent tile paths and putting them into a list
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-            List<String> paths = new ArrayList<>();
-            String tilePath = "";
-            while ((tilePath = reader.readLine()) != null) {
-                paths.add(tilePath);
-            }
-
-            //Reading all tile paths
-            reader.close();
-            for (String line : paths) {
-                try {
-                    reader = new BufferedReader(new FileReader(line));
-                    String contents[] = line.split(",");
-                    //possibleTiles.add(new Tile(contents[0], contents[1], ...));
-                    reader.close();
-                } catch (Exception e) {
-                    //Error handling I cba doing
-                }
-            }
-        }
-        catch (Exception e) {
-            //Some sort of error handling that I can't be bothered to do rn
-        }
-    }
-
-    private void calcNextTile() {
+    private void calcNextTile(Context context) {
         //Randomly generate a number to select from the tile calculation array
         int tileNum = generator.nextInt(1);
-        currentTile = possibleTiles.get(tileNum);
+        currentTile = context.getGameState().getPossibleTiles().get(tileNum);
+        map.add(currentTile);
     }
 
     //Getters
