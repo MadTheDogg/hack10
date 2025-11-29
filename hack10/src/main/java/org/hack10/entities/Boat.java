@@ -24,11 +24,15 @@ public class Boat extends Entity {
     public Position getPos() { return pos; }
 
     //movers
-    public void move() { pos = new Position(pos.x, pos.y - 1); } 
+    public void move() { 
+        pos = new Position(pos.x, pos.y - 1); 
+        this.hitbox.setLocation(pos.x, pos.y-1);
+    } 
     
     public void angleMove(){
         int xChange= (int) Math.cos(angle);
         int yChange= (int) Math.sin(angle);
         pos = new Position(pos.x + xChange, pos.y + yChange);
+        this.hitbox.setLocation(pos.x + xChange, pos.y + yChange);
     }
 }
