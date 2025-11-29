@@ -57,11 +57,13 @@ public class GameState {
             for (Object m : monsterArray) {
                 JSONObject monsterObject = (JSONObject) m;
                 String imagePath = (String) monsterObject.get("imagePath");
+                int monsterHealth = ((Long) monsterObject.get("health")).intValue();
+                int monsterDamage = ((Long) monsterObject.get("damage")).intValue();
 
                 //Creating monster object
                 try {
                     BufferedImage image = ImageIO.read(new File(imagePath));
-                    Monster monster = new Monster(image);
+                    Monster monster = new Monster(monsterHealth, monsterDamage,imagePath);
                     possibleMonsters.add(monster);
                 } catch (Exception e) {
                     //Error handliong

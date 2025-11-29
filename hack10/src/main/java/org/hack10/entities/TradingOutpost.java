@@ -8,14 +8,19 @@ import java.awt.Rectangle;
 
 public class TradingOutpost extends Entity {
     private Position position;
+    //resources and whatnot
 
-    public TradingOutpost(Position position) {
-        this.position = position;
+    public TradingOutpost() {
+        //will set resources and shit later
     }
 
     public Position getPosition() {
         return position;
     }
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     public void setImageAndHitbox(String filePath) {
         try{
         BufferedImage image = ImageIO.read(new File(filePath));

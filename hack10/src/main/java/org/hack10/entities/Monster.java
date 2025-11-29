@@ -11,12 +11,9 @@ public class Monster extends Entity {
     private int damage;
     private Position position;
 
-    public Monster(int health, int damage, Position position) {
+    public Monster(int health, int damage, String filePath) {
         this.health=health;
         this.damage=damage;
-        this.position=position;
-    }        
-    public void setImageAndHitbox(String filePath) {
         try{
         BufferedImage image = ImageIO.read(new File(filePath));
         this.image = image;
@@ -24,5 +21,9 @@ public class Monster extends Entity {
         }catch(Exception e){
             System.err.println("Error loading Resource image: " + e.getMessage());
         }
+    }        
+    public void setPosition(Position position){
+        this.position=position;
     }
+
 }

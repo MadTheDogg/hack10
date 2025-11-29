@@ -12,12 +12,22 @@ public class Resource extends Entity {
     private int quantity;
     private Position position;
 
-    public Resource(String resourceType, int quantity,Position position) {
+    public Resource(String resourceType, int quantity,String filePath){ 
         this.resourceType = resourceType;
         this.quantity = quantity;
+        try{
+        BufferedImage image = ImageIO.read(new File(filePath));
+        this.image = image;
+        this.hitbox = new Rectangle(position.x,position.y,image.getWidth(),image.getHeight());
+        }catch(Exception e){
+            System.err.println("Error loading Resource image: " + e.getMessage());
+        }
+    }
+    
+    public void setPosition(Position position){
         this.position=position;
     }
-
+    
     public String getResourceType() {
         return resourceType;
     }
@@ -29,14 +39,6 @@ public class Resource extends Entity {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    public void setImageAndHitbox(String filePath) {
-        try{
-        BufferedImage image = ImageIO.read(new File(filePath));
-        this.image = image;
-        this.hitbox = new Rectangle(position.x,position.y,image.getWidth(),image.getHeight());
-        }catch(Exception e){
-            System.err.println("Error loading Resource image: " + e.getMessage());
-        }
-    }
+    
     
 }
