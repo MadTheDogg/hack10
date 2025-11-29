@@ -1,5 +1,8 @@
 package org.hack10.entities;
 
+import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
+
 public class Boat extends Entity {
     private Position pos;
 
@@ -7,7 +10,7 @@ public class Boat extends Entity {
     public Boat(Position position)
     {
         pos = position;
-        
+        this.image = image;
     }
 
     //Getters
