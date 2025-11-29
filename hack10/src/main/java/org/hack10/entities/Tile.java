@@ -1,9 +1,4 @@
 package org.hack10.entities;
-<<<<<<< HEAD
-
-public class Tile {
-    
-=======
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.Buffer;
@@ -52,5 +47,4 @@ public class Tile{
     public void addInteractable(Entity entity, int x, int y){
         this.interactables[x][y] = entity;
     }
->>>>>>> d84631d (added tile and entity)
 }
