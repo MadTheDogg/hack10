@@ -46,6 +46,8 @@ public class App extends Application {
         }
         Image icon = imgUrl == null ? new Image("https://via.placeholder.com/64") : new Image(imgUrl.toExternalForm());
         ImageView ship = new ImageView(icon);
+        ship.setFitWidth(150);
+        ship.setFitHeight(150);
         ship.setX(50);
         ship.setY(50);
 
@@ -91,7 +93,7 @@ public class App extends Application {
                 ship.setY(ny);
 
                 double angle = Math.toDegrees(direction);
-                ship.setRotate(angle + 90);
+                ship.setRotate(angle);
             }
         };
         anim.start();
