@@ -34,10 +34,21 @@ public class Map {
     }
 
     //Public methods
-    public void isValidMove(Context context) {
-        if (true) {
-            //Using the tiles methods to check collision
+    public boolean isValidMove(Context context) {
+        switch (currentTile.canBeTravelled(context)) {
+            //-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
+            case -1 : return false;
+            case 1: {
+                break;
+            }
+            case 2: {
+                break;
+            }
+            case 3: {
+                break;
+            }
+            default : calcNextTile(context); break;
         }
-        else calcNextTile(context);
+        return true;
     }
 }

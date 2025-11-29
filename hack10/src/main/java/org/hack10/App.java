@@ -51,6 +51,7 @@ public class App extends Application {
         ship.setFitHeight(150);
         ship.setX(50);
         ship.setY(415);
+        context.setBoat(new Boat(new Position(50, 415)));
 
         root.getChildren().add(ship);
 
@@ -90,11 +91,20 @@ public class App extends Application {
                 if (nx > maxX) nx = maxX;
                 if (ny > maxY) ny = maxY;
 
-                ship.setX(nx);
-                ship.setY(ny);
+                if (context.getMap().isValidMove(context)) {
+                    ship.setX(nx);
+                    ship.setY(ny);
+                    context.getBoat().move(new Position((int)nx, (int)ny));
+                }
+                else {
+                    ship.setX(500);
+                    ship.setY(500);
+                    context.getBoat().move(new Position(500, 500));
+                }
 
                 double angle = Math.toDegrees(direction);
                 ship.setRotate(angle);
+                context.getBoat().angleMove(angle);
             }
         };
         anim.start();
@@ -112,7 +122,7 @@ public class App extends Application {
         stage.getIcons().add(iconApp);
         stage.setFullScreen(true);
     }
-    
+
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }

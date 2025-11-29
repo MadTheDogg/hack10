@@ -43,10 +43,17 @@ public class Tile{
         }
     }
     public void setHitbox(String filePath){//turns an image into a buffered image
-        try{
-            BufferedImage hitbox = ImageIO.read(new File(filePath));
+        try(InputStream is = getClass().getResourceAsStream(filePath)) {
+            if (is == null) {
+                is.close();
+                throw new IllegalArgumentException("File not found: " + filePath);
+            }
+            BufferedImage hitbox = ImageIO.read(is);
+            if (hitbox == null) {
+                throw new IllegalArgumentException("Failed to read image from file: " + filePath);
+            }
             this.hitbox = hitbox;
-        }catch(Exception e){
+        } catch(Exception e) {
             System.err.println("Error loading image: " + e.getMessage());
         }
     }
