@@ -1,68 +1,17 @@
 package org.hack10.entities;
 
-
-
 public class Boat {
-    /* attributes */
-    private int x;
-    private int y;
+    private Position pos;
 
-    /* constructor method */
-    public Boat(int x, int y)
+    //Constructor
+    public Boat(Position position)
     {
-        this.x = x;
-        this.y = y;
-
+        pos = position;
     }
 
-    /* get and set methods */
+    //Getters
+    public Position getPos() { return pos; }
 
-    public int getX()
-    {
-        return this.x;
-    }
-
-    public int getY()
-    {
-        return this.y;
-    }
-
-    public void setY(int y)
-    {
-        this.y = y;
-    }
-
-    public void setX(int x)
-    {
-        this.x = x;
-    }
-
-    public Position getPosition() 
-    {
-        return new Position(this.x, this.y);
-    }
-
-    /*movement methods */
-
-    public void moveRight()
-    {
-        this.x = (this.x+1);
-    }
-
-    public void moveLeft()
-    {
-        this.x = (this.x-1);
-    }
-
-    public void moveUp()
-    {
-        this.y = (this.y-1);
-    }
-    
-    public void moveDown()
-    {
-        this.y = (this.y+1);
-    }
-
-    
+    //Setters
+    public void move() { pos = new Position(pos.x, pos.y - 1); } 
 }

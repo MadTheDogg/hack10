@@ -1,5 +1,12 @@
 package org.hack10.entities;
 
-public record Position(int x, int y) {}
+public class Position {
+    public int x, y;
+
+    public Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
     
 
