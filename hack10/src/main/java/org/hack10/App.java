@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import org.hack10.gamestate.*;
 
 /**
  * JavaFX App
@@ -33,6 +34,7 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
+        Engine engine = new Engine();
     }
 
 }
