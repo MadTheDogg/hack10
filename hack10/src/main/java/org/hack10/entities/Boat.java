@@ -3,6 +3,9 @@ package org.hack10.entities;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
 
+import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
+
 public class Boat extends Entity {
     private Position pos;
 
