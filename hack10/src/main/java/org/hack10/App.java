@@ -29,46 +29,43 @@ import java.util.Set;
  */
 public class App extends Application {
 
+    // moved here so lambdas can mutate it
+    private double direction = 0.0;
+
     private static Scene scene;
 
     @Override
     public void start(Stage stage) throws IOException {
         Group root = new Group();
         scene = new Scene(root, 640, 480);
-        
-        Image icon = new Image(getClass().getResource("/org/hack10/TopDown.png").toExternalForm());
+
+        // safe resource load
+        java.net.URL imgUrl = getClass().getResource("/org/hack10/TopDown.png");
+        if (imgUrl == null) {
+            System.err.println("ERROR: /org/hack10/TopDown.png not found on classpath; using placeholder.");
+        }
+        Image icon = imgUrl == null ? new Image("https://via.placeholder.com/64") : new Image(imgUrl.toExternalForm());
         ImageView ship = new ImageView(icon);
         ship.setX(50);
         ship.setY(50);
+
         root.getChildren().add(ship);
 
-        // Movement state (pixels per second)
-        final double SPEED = 200.0; // change to taste
-        final double[] velocity = new double[] { SPEED, 0 }; // vx, vy
+        final double SPEED = 200.0; // pixels per second
 
         // Make scene focusable and handle keys
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case RIGHT:  { velocity[0] = SPEED;  velocity[1] = 0;  break; }
-                case LEFT:   { velocity[0] = -SPEED; velocity[1] = 0;  break; }
-                case DOWN:   { velocity[0] = 0;      velocity[1] = SPEED; break; }
-                case UP:     { velocity[0] = 0;      velocity[1] = -SPEED; break; }
-                case SPACE:  { velocity[0] = 0;      velocity[1] = 0;  break; } // stop
-                // optional: diagonal with shift or additional keys
-                case D:      { velocity[0] = SPEED;  velocity[1] = 0;  break; } // WASD support
-                case A:      { velocity[0] = -SPEED; velocity[1] = 0;  break; }
-                case S:      { velocity[0] = 0;      velocity[1] = SPEED; break; }
-                case W:      { velocity[0] = 0;      velocity[1] = -SPEED; break; }
-                default:     { break; }
+                case D: { direction += Math.PI / 16; break; }
+                case A: { direction -= Math.PI / 16; break; }
+                default: { break; }
             }
         });
 
-        // Optional: keep moving while key held (more advanced handling uses setOnKeyReleased)
         scene.setOnKeyReleased(event -> {
-            // If you want to stop when keys are released, implement logic here.
+            // optionally handle release
         });
 
-        // Animation loop with delta time
         final long[] lastTime = { 0L };
         AnimationTimer anim = new AnimationTimer() {
             @Override
@@ -80,11 +77,9 @@ public class App extends Application {
                 double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
                 lastTime[0] = now;
 
-                // update position
-                double nx = ship.getX() + velocity[0] * deltaSeconds;
-                double ny = ship.getY() + velocity[1] * deltaSeconds;
+                double nx = ship.getX() + Math.cos(direction) * SPEED * deltaSeconds;
+                double ny = ship.getY() + Math.sin(direction) * SPEED * deltaSeconds;
 
-                // optional: clamp to scene bounds (keep fully visible)
                 double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
                 double maxY = scene.getHeight() - ship.getBoundsInLocal().getHeight();
                 if (nx < 0) nx = 0;
@@ -95,11 +90,8 @@ public class App extends Application {
                 ship.setX(nx);
                 ship.setY(ny);
 
-                // optional: rotate ship to face movement direction
-                if (velocity[0] != 0 || velocity[1] != 0) {
-                    double angle = Math.toDegrees(Math.atan2(velocity[1], velocity[0]));
-                    ship.setRotate(angle);
-                }
+                double angle = Math.toDegrees(direction);
+                ship.setRotate(angle + 90);
             }
         };
         anim.start();
@@ -107,7 +99,6 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
 
-        // ensure focus after the window is visible
         Platform.runLater(() -> root.requestFocus());
     }
 
@@ -122,7 +113,6 @@ public class App extends Application {
 
     public static void main(String[] args) {
         launch();
-        //Engine engine = new Engine();
     }
 
 }
