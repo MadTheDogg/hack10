@@ -13,16 +13,16 @@ public class Map {
 
     public Map(Context context) {
         this.context = context;
-        calcNextTile(context);
-
         map = new ArrayList<>();
         generator = new Random();
+
+        calcNextTile(context);
     }
 
     private void calcNextTile(Context context) {
         //Randomly generate a number to select from the tile calculation array
         int tileNum = generator.nextInt(1);
-        currentTile = context.getGameState().getPossibleTiles().get(tileNum);
+        currentTile = context.getPossibleTiles().get(tileNum);
         map.add(currentTile);
 
         //Will need to add entity, resource, building spawning

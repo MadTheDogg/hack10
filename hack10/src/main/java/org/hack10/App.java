@@ -6,23 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-
 import org.hack10.gamestate.*;
-
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Group;
-import javafx.scene.input.KeyCode;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
-import java.util.HashSet;
-import java.util.Set;
+import org.hack10.entities.*;
 
 /**
  * JavaFX App
@@ -33,21 +23,19 @@ public class App extends Application {
     private double direction = 0.0;
 
     private static Scene scene;
+    private Group root;
 
     @Override
     public void start(Stage stage) throws IOException {
-        Group root = new Group();
+        root = new Group();
         scene = new Scene(root, 640, 480);
+        setTitle(stage);
 
-        // set stage title and icon
-        stage.setTitle("Odyssey");
-        Image iconApp = new Image(getClass().getResourceAsStream("/org/hack10/shipicon.png"));
-        stage.getIcons().add(iconApp);
-        stage.setFullScreen(true);
+        Context context = new Context();
+        context.setMap(new Map(context));
 
-        //add background image
-        Image landscape = new Image(getClass().getResourceAsStream("/org/hack10/landscape1.png"));
-        ImageView background = new ImageView(landscape);
+        //Getting current tile
+        ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
         background.fitWidthProperty().bind(scene.widthProperty());
         background.fitHeightProperty().bind(scene.heightProperty());
         root.getChildren().add(background);
@@ -117,6 +105,14 @@ public class App extends Application {
         Platform.runLater(() -> root.requestFocus());
     }
 
+    public void setTitle(Stage stage) {
+        // set stage title and icon
+        stage.setTitle("Odyssey");
+        Image iconApp = new Image(getClass().getResourceAsStream("/org/hack10/shipicon.png"));
+        stage.getIcons().add(iconApp);
+        stage.setFullScreen(true);
+    }
+    
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
