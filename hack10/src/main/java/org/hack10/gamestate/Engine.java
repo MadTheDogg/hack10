@@ -8,6 +8,8 @@ public class Engine {
 
     public Engine() {
         currentContext = new Context(this, currentGameState);
-        currentGameState = new GameState(new Map(currentContext));        
+        //Initialising game state with initial entities
+        currentGameState = new GameState(new Map(currentContext),
+            new Boat(new Position(0, 0)));        
     }
 }

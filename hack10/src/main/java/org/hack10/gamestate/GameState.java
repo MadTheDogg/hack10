@@ -14,13 +14,15 @@ public class GameState {
 
     //private Boat _boat
     private Map map;
+    private Boat boat;
     private List<Tile> possibleTiles;
     
-    public GameState(Map map) {
+    public GameState(Map map, Boat boat) {
         possibleTiles = new ArrayList<>();
         readPossibleTiles(GameState.class.getResourceAsStream("/org/hack10/config/Tiles.txt"));
 
         this.map = map;
+        this.boat = boat;
     }
     
     //Setup

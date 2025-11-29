@@ -24,10 +24,20 @@ public class Map {
         int tileNum = generator.nextInt(1);
         currentTile = context.getGameState().getPossibleTiles().get(tileNum);
         map.add(currentTile);
+
+        //Will need to add entity, resource, building spawning
     }
 
     //Getters
     public Tile getCurrentTile() {
         return currentTile;
+    }
+
+    //Public methods
+    public void isValidMove(Context context) {
+        if (true) {
+            //Using the tiles methods to check collision
+        }
+        else calcNextTile(context);
     }
 }
