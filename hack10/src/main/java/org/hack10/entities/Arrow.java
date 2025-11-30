@@ -22,7 +22,7 @@ public class Arrow extends Entity{
     }
     public void setPosition(Position position){
         this.position=position;
-        this.hitbox.setLocation(position.x,position.y);
+        this.hitbox.setLocation((int) position.x,(int) position.y);
     }
     public boolean move(Context context){//returns false if arrow runs out of speed or hits something
         if(this.speed<=0){
@@ -48,7 +48,7 @@ public class Arrow extends Entity{
                 return false;
             }
         }   
-        Entity[][] interactables = context.getGameState().getMap().getCurrentTile().getInteractables();
+        Entity[][] interactables = context.getMap().getCurrentTile().getInteractables();
         for (int i=0;i<interactables.length;i++){//check if boat hitbox hits an interactable hitbox
             for(int j=0;j<interactables[i].length;j++){
                 Entity entity = interactables[i][j];

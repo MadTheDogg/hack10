@@ -24,7 +24,7 @@ public class Monster extends Entity {
     }        
     public void setPosition(Position position){
         this.position=position;
-        this.hitbox.setLocation(position.x, position.y);
+        this.hitbox.setLocation((int) position.x, (int) position.y);
     }
 
 }

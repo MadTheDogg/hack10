@@ -6,23 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-
 import org.hack10.gamestate.*;
-
 import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Group;
-import javafx.scene.input.KeyCode;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
-import java.util.HashSet;
-import java.util.Set;
+import org.hack10.entities.*;
 
 /**
  * JavaFX App
@@ -33,23 +23,22 @@ public class App extends Application {
     private double direction = 0.0;
 
     private static Scene scene;
+    private Group root;
 
     @Override
     public void start(Stage stage) throws IOException {
-        Group root = new Group();
+        root = new Group();
         scene = new Scene(root, 640, 480);
+        setTitle(stage);
 
-        // set stage title and icon
-        stage.setTitle("Odyssey");
-        Image iconApp = new Image(getClass().getResourceAsStream("/org/hack10/shipicon.png"));
-        stage.getIcons().add(iconApp);
-        stage.setFullScreen(true);
+        Context context = new Context();
+        context.setMap(new Map(context));
 
-        //add background image
-        Image landscape = new Image(getClass().getResourceAsStream("/org/hack10/landscape1.png"));
-        ImageView background = new ImageView(landscape);
+        //Getting current tile
+        ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
         background.fitWidthProperty().bind(scene.widthProperty());
         background.fitHeightProperty().bind(scene.heightProperty());
+        context.getMap().getCurrentTile().setBackground(background);
         root.getChildren().add(background);
 
         // safe resource load
@@ -63,6 +52,7 @@ public class App extends Application {
         ship.setFitHeight(150);
         ship.setX(50);
         ship.setY(415);
+        context.setBoat(new Boat(new Position(50, 415)));
 
         root.getChildren().add(ship);
 
@@ -82,6 +72,7 @@ public class App extends Application {
         });
 
         final long[] lastTime = { 0L };
+        //Essentially the game loop
         AnimationTimer anim = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -89,32 +80,77 @@ public class App extends Application {
                     lastTime[0] = now;
                     return;
                 }
-                double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
-                lastTime[0] = now;
+                Position pos = context.getBoat().getPos();
 
-                double nx = ship.getX() + Math.cos(direction) * SPEED * deltaSeconds;
-                double ny = ship.getY() + Math.sin(direction) * SPEED * deltaSeconds;
+                if (context.getMap().isEnd(context)) {
+                    System.out.println("App.Java : Reached end of tile, calculating next tile.");
+                    pos = context.getBoat().getPos();
+                    ship.setX(pos.x);
+                    ship.setX(pos.y);
+                }
+                else if (context.getMap().isValidMove(context)) {
+                    //ship.setX(nx);
+                    //ship.setY(ny);
 
-                double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
-                double maxY = scene.getHeight() - ship.getBoundsInLocal().getHeight();
-                if (nx < 0) nx = 0;
-                if (ny < 0) ny = 0;
-                if (nx > maxX) nx = maxX;
-                if (ny > maxY) ny = maxY;
+                    double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
+                    lastTime[0] = now;
+                    double nx = pos.x + Math.cos(direction) * SPEED * deltaSeconds;
+                    double ny = pos.y + Math.sin(direction) * SPEED * deltaSeconds;
 
-                ship.setX(nx);
-                ship.setY(ny);
+                    double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
+                    double maxY = scene.getHeight() - ship.getBoundsInLocal().getHeight();
+
+                    if (nx < 0) nx = 0;
+                    if (ny < 0) ny = 0;
+                    if (nx > maxX) nx = maxX;
+                    if (ny > maxY) ny = maxY;
+
+                    context.getBoat().move(new Position(nx, ny));
+                    ship.setX(pos.x);
+                    ship.setX(pos.y);
+                }
+                else {
+                    //ship.setX(500);
+                    //ship.setY(500);
+                    //context.getBoat().move(new Position(500, 500));                    
+                }
+                ship.setX(pos.x);
+                ship.setY(pos.y);
 
                 double angle = Math.toDegrees(direction);
                 ship.setRotate(angle);
+                context.getBoat().angleMove(angle);
+
+                if (background != context.getMap().getCurrentTile().getBackground()) {
+                    root.getChildren().remove(0);
+
+                    ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
+                    background.fitWidthProperty().bind(scene.widthProperty());
+                    background.fitHeightProperty().bind(scene.heightProperty());
+                    root.getChildren().add(background);
+                    context.getMap().getCurrentTile().setBackground(background);
+
+                    background.toBack();
+                    ship.toFront();
+                }
             }
         };
+        //Starts the timer
         anim.start();
 
+        //Shows the scene
         stage.setScene(scene);
         stage.show();
 
         Platform.runLater(() -> root.requestFocus());
+    }
+
+    public void setTitle(Stage stage) {
+        // set stage title and icon
+        stage.setTitle("Odyssey");
+        Image iconApp = new Image(getClass().getResourceAsStream("/org/hack10/shipicon.png"));
+        stage.getIcons().add(iconApp);
+        stage.setFullScreen(true);
     }
 
     static void setRoot(String fxml) throws IOException {

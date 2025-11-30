@@ -1,9 +1,9 @@
 package org.hack10.entities;
 
 public class Position {
-    public int x, y;
+    public double x, y;
 
-    public Position(int x, int y) {
+    public Position(double x, double y) {
         this.x = x;
         this.y = y;
     }

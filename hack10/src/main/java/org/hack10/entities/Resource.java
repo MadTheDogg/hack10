@@ -18,7 +18,7 @@ public class Resource extends Entity {
         try{
         BufferedImage image = ImageIO.read(new File(filePath));
         this.image = image;
-        this.hitbox = new Rectangle(-100,-100,image.getWidth(),image.getHeight());
+        this.hitbox = new Rectangle(100,100,image.getWidth(),image.getHeight());
         }catch(Exception e){
             System.err.println("Error loading Resource image: " + e.getMessage());
         }

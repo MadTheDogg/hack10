@@ -2,25 +2,35 @@ package org.hack10.entities;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+
 import org.hack10.gamestate.*;
+
 import java.awt.Rectangle;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
 import javax.imageio.ImageIO;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 
 
 public class Tile{
-    private BufferedImage image;
+    private Image image;
     private BufferedImage hitbox;//white and black image for hitbox - white is allowed, black is not - no racial motivations
     private Entity[][] interactables;
+    private ImageView background;
+
+    private String imagePath, hitPath;
+    public boolean moved = false;
 
     //constructor
     public Tile(){
-        this.image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
-        this.hitbox = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_BINARY);
+        //this.hitbox = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_BINARY);
         this.interactables = new Entity[32][32];
     }
 
     //getters
-    public BufferedImage getImage() {
+    public Image getImage() {
         return image;
     }
     public BufferedImage getHitbox() {
@@ -31,18 +41,27 @@ public class Tile{
     }
     //setters
     public void setImage(String filePath){//turns an image into a buffered image
-        try{
-        BufferedImage image = ImageIO.read(new File(filePath));
-        this.image = image;
-        }catch(Exception e){
+        imagePath = filePath;
+        try {
+            Image image = new Image(getClass().getResourceAsStream(filePath));
+            this.image = image;
+        } catch(Exception e){
             System.err.println("Error loading image: " + e.getMessage());
         }
     }
     public void setHitbox(String filePath){//turns an image into a buffered image
-        try{
-        BufferedImage hitbox = ImageIO.read(new File(filePath));
-        this.hitbox = hitbox;
-        }catch(Exception e){
+        hitPath = filePath;
+        try(InputStream is = getClass().getResourceAsStream(filePath)) {
+            if (is == null) {
+                is.close();
+                throw new IllegalArgumentException("File not found: " + filePath);
+            }
+            BufferedImage hitbox = ImageIO.read(is);
+            if (hitbox == null) {
+                throw new IllegalArgumentException("Failed to read image from file: " + filePath);
+            }
+            this.hitbox = hitbox;
+        } catch(Exception e) {
             System.err.println("Error loading image: " + e.getMessage());
         }
     }
@@ -51,7 +70,19 @@ public class Tile{
         this.interactables[x][y] = entity;
     }
     public Integer canBeTravelled(Context context){//-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
-        Rectangle playerCollision = context.getGameState().getBoat().getHitbox();
+        if (context == null || context.getBoat() == null) {
+            System.err.println("canBeTravelled: context or boat is null");
+            return 0;
+        }
+        Rectangle playerCollision = context.getBoat().getHitbox();
+        if (playerCollision == null) {
+            System.err.println("canBeTravelled: boat hitbox is null");
+            return 0;
+        }
+        if (hitbox == null) {
+            System.err.println("canBeTravelled: tile hitbox image is null");
+            return 0;
+        }
         int [] hitboxColours = hitbox.getRGB(playerCollision.x, playerCollision.y, playerCollision.width, playerCollision.height, null, 0, playerCollision.width);
         for(int colour : hitboxColours){
             if(colour == -16777216){//black ??? - does it go that high?
@@ -78,11 +109,22 @@ public class Tile{
         }return 0;
     }
     public Boolean isEnd(Context context){//checks if it is the end of the tile aka move to next one
-        Rectangle playerCollision = context.getGameState().getBoat().getHitbox();
-        if (image.getWidth()<(playerCollision.x+playerCollision.getWidth())){//if top right of hitbox is left of boat aka boat is in next tile
+        Rectangle playerCollision = context.getBoat().getHitbox();
+        System.out.print(playerCollision.x + " | " + (image.getWidth() - (2 * playerCollision.width)) + ", ");
+        if (playerCollision.x >= image.getWidth() - (2 * playerCollision.width)) {
+            System.out.println("Tile.java: Reached end of tile");
             return true;
-        }else{
-            return false;
         }
+        else return false;
+    }
+
+    public ImageView getBackground() {
+        return background;
+    }
+    public void setBackground(ImageView background) {
+        this.background = background;
+    }
+    public String toString() {
+        return imagePath + " | " + hitPath;
     }
 }
