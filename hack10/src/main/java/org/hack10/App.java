@@ -15,6 +15,7 @@ import javafx.scene.Group;
 import org.hack10.entities.*;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Label;
 
 /**
  * JavaFX App
@@ -34,7 +35,7 @@ public class App extends Application {
         root = new Group();
         scene = new Scene(root, 640, 480);
         setTitle(stage);
-
+ 
         Context context = new Context();
 
         // ensure Boat exists before Map.calcNextTile() uses it
@@ -42,6 +43,21 @@ public class App extends Application {
         context.getBoat().setSailDirection(Math.PI / 2);
         context.getBoat().setWindDirection(Math.PI / 2);
         context.setMap(new Map(context));
+
+        //create 
+        //Arrow arrow = new Arrow(10);
+        //arrow.setPosition(new Position(100,100));
+        //java.net.URL imgUrl = getClass().getResource("/org/hack10/resources/arrow.png");
+        //if (imgUrl == null) {
+        //    System.err.println("ERROR: /org/hack10/resources/arrow.png not found on classpath; using placeholder.");
+        //}
+        /*
+        ImageView arrowView = new ImageView(imgUrl == null ? new Image("https://via.placeholder.com/50") : new Image(imgUrl.toExternalForm()));
+        arrowView.setFitWidth(50);
+        arrowView.setFitHeight(50);
+        arrowView.setX(context.getArrow().getPosition().x);
+        arrowView.setY(context.getArrow().getPosition().y);
+        root.getChildren().add(arrowView); */
 
         // Getting current tile
         background = new ImageView(context.getMap().getCurrentTile().getImage());
@@ -64,11 +80,11 @@ public class App extends Application {
         }
 
         // safe resource load
-        java.net.URL imgUrl = getClass().getResource("/org/hack10/TopDown.png");
-        if (imgUrl == null) {
+        java.net.URL imgUrl2 = getClass().getResource("/org/hack10/TopDown.png");
+        if (imgUrl2 == null) {
             System.err.println("ERROR: /org/hack10/TopDown.png not found on classpath; using placeholder.");
         }
-        Image icon = imgUrl == null ? new Image("https://via.placeholder.com/64") : new Image(imgUrl.toExternalForm());
+        Image icon = imgUrl2 == null ? new Image("https://via.placeholder.com/64") : new Image(imgUrl2.toExternalForm());
         ImageView ship = new ImageView(icon);
         ship.setFitWidth(150);
         ship.setFitHeight(150);
@@ -131,6 +147,10 @@ public class App extends Application {
                         context.getBoat().setSailDirection(context.getBoat().getSailDirection() + 0.5);
                     }
                     break;
+                case ENTER:
+                    if (context.getBoat().getHealth() <= 0) {
+                        Platform.exit();
+                    }
                 default:
                     break;
             }
@@ -139,6 +159,11 @@ public class App extends Application {
         scene.setOnKeyReleased(event -> {
             // optionally handle release
         });
+
+        Label health = new Label("Health: " + context.getBoat().getHealth());
+        health.setLayoutX(10);
+        health.setLayoutY(10);
+        root.getChildren().add(health);
 
         final long[] lastTime = { 0L };
         //Essentially the game loop
@@ -150,6 +175,16 @@ public class App extends Application {
                     return;
                 }
                 Position pos = context.getBoat().getPos();
+
+                if (context.getBoat().getHealth() <= 0) {
+                    Label gameOver = new Label("GAME OVER");
+                    gameOver.setLayoutX(scene.getWidth() / 2 - 50);
+                    gameOver.setLayoutY(scene.getHeight() / 2 - 25);
+                    gameOver.setPrefSize(scene.getWidth(), scene.getHeight());
+                    gameOver.setStyle("-fx-font-size: 48px; -fx-text-fill: red;");
+                    root.getChildren().add(gameOver);
+                    this.stop();
+                }
 
                 if (context.getMap().isEnd(context)) {
                     System.out.println("App.Java : Reached end of tile, calculating next tile.");
@@ -214,6 +249,8 @@ public class App extends Application {
                 sail.setRotate(Math.toDegrees(context.getBoat().getSailDirection()));
                 windParticle.setRotate(Math.toDegrees(context.getBoat().getWindDirection()));
                 context.getBoat().angleMove(angle);
+
+                health.setText("Health: " + context.getBoat().getHealth());
 
                 if (context.getMap().getCurrentTile().moved == false) {
                     root.getChildren().remove(0);

@@ -17,6 +17,7 @@ public class Boat extends Entity {
     //Constructor
     public Boat(Position position)
     {
+        health = 100;
         pos = position;
         angle = 0;
         this.hitbox = new Rectangle((int) position.x, (int) position.y, 100, 100);
@@ -46,6 +47,10 @@ public class Boat extends Entity {
         return sailDirection; 
     }
 
+    public int getHealth() {
+        return health;
+    }
+
     //Setters
 
     public void setWindDirection(double windDirection) 
@@ -57,6 +62,14 @@ public class Boat extends Entity {
     { 
         this.sailDirection = sailDirection; 
     }
+
+    public void damage(int damage) {
+        if (health - damage >= 0) {
+            health -= damage;
+        } else {
+            health = 0;
+        }
+     }
 
     //movers
     public void move(Position position) { 
