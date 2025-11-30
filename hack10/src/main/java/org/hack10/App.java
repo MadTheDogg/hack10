@@ -39,6 +39,19 @@ public class App extends Application {
         Group root = new Group();
         scene = new Scene(root, 640, 480);
 
+        // set stage title and icon
+        stage.setTitle("Odyssey");
+        Image iconApp = new Image(getClass().getResourceAsStream("/org/hack10/shipicon.png"));
+        stage.getIcons().add(iconApp);
+        stage.setFullScreen(true);
+
+        //add background image
+        Image landscape = new Image(getClass().getResourceAsStream("/org/hack10/landscape1.png"));
+        ImageView background = new ImageView(landscape);
+        background.fitWidthProperty().bind(scene.widthProperty());
+        background.fitHeightProperty().bind(scene.heightProperty());
+        root.getChildren().add(background);
+
         // safe resource load
         java.net.URL imgUrl = getClass().getResource("/org/hack10/TopDown.png");
         if (imgUrl == null) {
@@ -49,7 +62,7 @@ public class App extends Application {
         ship.setFitWidth(150);
         ship.setFitHeight(150);
         ship.setX(50);
-        ship.setY(50);
+        ship.setY(415);
 
         root.getChildren().add(ship);
 
