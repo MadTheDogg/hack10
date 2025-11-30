@@ -1,8 +1,5 @@
 package org.hack10.entities;
 
-import java.awt.Image;
-import java.awt.Point;
-
 import org.hack10.gamestate.*;
 
 import javafx.scene.image.Image;
@@ -10,9 +7,7 @@ import javafx.scene.image.Image;
 import java.io.File;
 import java.io.InputStream;
 import java.awt.image.BufferedImage;
-
 import javax.imageio.ImageIO;
-
 import java.awt.Rectangle;
 import java.util.*;
 
@@ -77,10 +72,3 @@ public class Arrow extends Entity{
         return this.drawImage;
     }
 }
-
-    //getters
-    public Position getPosition(){return this.position;}
-    public BufferedImage getImage(){return this.image;}
-
-}
-
