@@ -20,6 +20,9 @@ public class Tile{
     private Entity[][] interactables;
     private ImageView background;
 
+    private String imagePath, hitPath;
+    public boolean moved = false;
+
     //constructor
     public Tile(){
         //this.hitbox = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_BINARY);
@@ -36,6 +39,7 @@ public class Tile{
 
     //setters
     public void setImage(String filePath){//turns an image into a buffered image
+        imagePath = filePath;
         try {
             Image image = new Image(getClass().getResourceAsStream(filePath));
             this.image = image;
@@ -44,6 +48,7 @@ public class Tile{
         }
     }
     public void setHitbox(String filePath){//turns an image into a buffered image
+        hitPath = filePath;
         try(InputStream is = getClass().getResourceAsStream(filePath)) {
             if (is == null) {
                 is.close();
@@ -103,7 +108,11 @@ public class Tile{
     }
     public Boolean isEnd(Context context){//checks if it is the end of the tile aka move to next one
         Rectangle playerCollision = context.getBoat().getHitbox();
-        if (playerCollision.x >= image.getWidth() - (2 * playerCollision.width) - 100 ) return true;
+        System.out.print(playerCollision.x + " | " + (image.getWidth() - (2 * playerCollision.width)) + ", ");
+        if (playerCollision.x >= image.getWidth() - (2 * playerCollision.width)) {
+            System.out.println("Tile.java: Reached end of tile");
+            return true;
+        }
         else return false;
     }
 
@@ -112,5 +121,8 @@ public class Tile{
     }
     public void setBackground(ImageView background) {
         this.background = background;
+    }
+    public String toString() {
+        return imagePath + " | " + hitPath;
     }
 }
