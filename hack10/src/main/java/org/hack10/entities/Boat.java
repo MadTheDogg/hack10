@@ -11,6 +11,8 @@ public class Boat extends Entity {
     private double windDirection;
     private double sailDirection;
     private int health;
+    private int ballistaLevel;
+    private int sailLevel;
 
     //Constructor
     public Boat(Position position)
@@ -26,11 +28,14 @@ public class Boat extends Entity {
         }
         this.windDirection = 0.0;
         health = 100;
+        this.ballistaLevel=1;
+        this.sailLevel=1;
     }
 
     //Getters
     public Position getPos() { return pos; }
-
+    public int getBallistaLevel(){ return ballistaLevel; }
+    public int getSailLevel(){ return sailLevel; }
     public double getWindDirection() 
     { 
         return windDirection; 

@@ -1,7 +1,11 @@
 package org.hack10.entities;
 
 import org.hack10.gamestate.*;
+
+import javafx.scene.image.Image;
+
 import java.io.File;
+import java.io.InputStream;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
@@ -11,12 +15,15 @@ public class Arrow extends Entity{
     int speed;
     Position position;
 
-    public Arrow(int speed,String filePath){
+    public Arrow(int speed){
         this.speed=speed;
         try{
-        BufferedImage image = ImageIO.read(new File(filePath));
-        this.image = image;
-        this.hitbox = new Rectangle(-100,-100,image.getWidth(),image.getHeight());//-100 so can not be hit before being generated
+            InputStream is = getClass().getResourceAsStream("../../../resources/arrow.png");
+            BufferedImage image = ImageIO.read(is);//hard code as one type and i cba
+            this.image = image;
+            this.drawImage = new Image(getClass().getResourceAsStream("../../../resources/arrow.png"));
+            this.hitbox = new Rectangle(-100,-100,image.getWidth(),image.getHeight());//-100 so can not be hit before being generated
+            System.out.println("Arrow created with hitbox size: " + this.hitbox.width + "x" + this.hitbox.height);
         }catch(Exception e){
             System.err.println("Error loading Resource image: " + e.getMessage());
         }
@@ -32,7 +39,7 @@ public class Arrow extends Entity{
         else if (!(this.checkCollision(context))){
             return false;
         }else{
-            this.speed--;
+            this.speed=-this.speed/10;//decrease speed by 10% each move
             this.position.x+=speed;
             this.hitbox.setLocation((int)this.position.x,(int)this.position.y);
             return true;
@@ -61,4 +68,7 @@ public class Arrow extends Entity{
         return true;
     }
     public int calculateDMG(){return this.speed*10;}
+    public Image getViewImage(){
+        return this.drawImage;
+    }
 }
