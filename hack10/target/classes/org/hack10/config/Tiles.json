@@ -2,24 +2,30 @@
     [
         {
             "imagePath":"/org/hack10/landscape1.png",
-            "hitboxPath":"/org/hack10/landscape1-hitbox.png"
+            "hitboxPath":"/org/hack10/landscape1-hitbox.png",
+            "nodes":[{"x":250, "y":200}, {"x":245, "y":350}]
         },
         {
             "imagePath":"/org/hack10/landscape2.png",
-            "hitboxPath":"/org/hack10/landscape2-hitbox.png"
+            "hitboxPath":"/org/hack10/landscape2-hitbox.png",
+            "nodes":[{"x":250, "y":200}, {"x":245, "y":350}]
         },
         {
             "imagePath":"/org/hack10/landscape3.png",
-            "hitboxPath":"/org/hack10/landscape3-hitbox.png"
+            "hitboxPath":"/org/hack10/landscape3-hitbox.png",
+            "nodes":[{"x":250, "y":200}, {"x":245, "y":350}]
         },
         {
             "imagePath":"/org/hack10/landscape4.png",
-            "hitboxPath":"/org/hack10/landscape4-hitbox.png"
+            "hitboxPath":"/org/hack10/landscape4-hitbox.png",
+            "nodes":[{"x":250, "y":200}, {"x":245, "y":350}]
         }
     ],
     [
         {
-            "imagePath":""
+            "imagePath":"/org/hack10/monsters/dave.png",
+            "health":50,
+            "damage":10
         }
     ]
 ]

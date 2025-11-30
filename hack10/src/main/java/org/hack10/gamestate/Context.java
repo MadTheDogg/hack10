@@ -47,7 +47,16 @@ public class Context {
                 String imagePath = (String) tileObject.get("imagePath");
                 String hitboxPath = (String) tileObject.get("hitboxPath");
 
-                Tile tile = new Tile();
+                JSONArray nodes = (JSONArray) tileObject.get("nodes");
+                List<Node> nodeList = new ArrayList<>();
+                for (Object n : nodes) {
+                    JSONObject nodeObject = (JSONObject) n;
+                    Long x = (Long) nodeObject.get("x");
+                    Long y = (Long) nodeObject.get("y");
+                    nodeList.add(new Node(new Position(x.intValue(), y.intValue())));
+                }
+
+                Tile tile = new Tile(nodeList);
                 tile.setImage(imagePath);
                 tile.setHitbox(hitboxPath);
 
@@ -64,7 +73,6 @@ public class Context {
 
                 //Creating monster object
                 try {
-                    BufferedImage image = ImageIO.read(new File(imagePath));
                     Monster monster = new Monster(monsterHealth, monsterDamage,imagePath);
                     possibleMonsters.add(monster);
                 } catch (Exception e) {
@@ -78,6 +86,7 @@ public class Context {
 
     //Getters
     public List<Tile> getPossibleTiles() { return possibleTiles; }
+    public List<Monster> getPossibleMonsters() { return possibleMonsters; }
     public Boat getBoat() { return boat; }
     public Map getMap() { return map; }
 

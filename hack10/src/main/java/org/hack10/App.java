@@ -13,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Group;
 import org.hack10.entities.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * JavaFX App
@@ -47,6 +49,19 @@ public class App extends Application {
         background.fitHeightProperty().bind(scene.heightProperty());
         context.getMap().getCurrentTile().setBackground(background);
         root.getChildren().add(background);
+
+        List<ImageView> entities = new ArrayList<>();
+        for (Entity e : context.getMap().getCurrentTile().getInteractables()) {
+            // add entity images to root
+            ImageView entityView = new ImageView(e.getViewImage());
+            entityView.setFitWidth(100);
+            entityView.setFitHeight(100);
+            entityView.setX(e.getPosition().x);
+            entityView.setY(e.getPosition().y);
+            root.getChildren().add(entityView);
+            entityView.toFront();
+            entities.add(entityView);
+        }
 
         // safe resource load
         java.net.URL imgUrl = getClass().getResource("/org/hack10/TopDown.png");
@@ -84,9 +99,6 @@ public class App extends Application {
         windParticle.setFitHeight(100);
         windParticle.setX(150);
         windParticle.setY(75);
-        
-
-
 
         context.setBoat(new Boat(new Position(50, 415)));
         context.getBoat().setSailDirection(Math.PI / 2);
@@ -143,7 +155,7 @@ public class App extends Application {
                     System.out.println("App.Java : Reached end of tile, calculating next tile.");
                     pos = context.getBoat().getPos();
                     ship.setX(pos.x);
-                    ship.setX(pos.y);
+                    ship.setY(pos.y);
                 }
                 else if (context.getMap().isValidMove(context)) {
                     //ship.setX(nx);
@@ -203,8 +215,12 @@ public class App extends Application {
                 windParticle.setRotate(Math.toDegrees(context.getBoat().getWindDirection()));
                 context.getBoat().angleMove(angle);
 
-                if (background != context.getMap().getCurrentTile().getBackground()) {
+                if (context.getMap().getCurrentTile().moved == false) {
                     root.getChildren().remove(0);
+                    for (ImageView e : entities) {                        
+                        root.getChildren().remove(e);
+                    }
+                    entities.clear();
 
                     ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
                     background.fitWidthProperty().bind(scene.widthProperty());
@@ -214,6 +230,18 @@ public class App extends Application {
 
                     background.toBack();
                     sail.toFront();
+
+                    for (Entity e : context.getMap().getCurrentTile().getInteractables()) {
+                        // add entity images to root
+                        ImageView entityView = new ImageView(e.getViewImage());
+                        entityView.setFitWidth(100);
+                        entityView.setFitHeight(100);
+                        entityView.setX(e.getPosition().x);
+                        entityView.setY(e.getPosition().y);
+                        root.getChildren().add(entityView);
+                        entityView.toFront();
+                        entities.add(entityView);
+                    }
                 }
             }
         };
