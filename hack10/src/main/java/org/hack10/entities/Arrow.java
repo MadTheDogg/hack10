@@ -1,9 +1,15 @@
 package org.hack10.entities;
 
+import java.awt.Image;
+import java.awt.Point;
+
 import org.hack10.gamestate.*;
+
 import java.io.File;
 import java.awt.image.BufferedImage;
+
 import javax.imageio.ImageIO;
+
 import java.awt.Rectangle;
 import java.util.*;
 
@@ -11,10 +17,10 @@ public class Arrow extends Entity{
     int speed;
     Position position;
 
-    public Arrow(int speed,String filePath){
+    public Arrow(int speed){
         this.speed=speed;
         try{
-        BufferedImage image = ImageIO.read(new File(filePath));
+        BufferedImage image = ImageIO.read(new File("src/main/resources/org/hack10/Arrow.png"));
         this.image = image;
         this.hitbox = new Rectangle(-100,-100,image.getWidth(),image.getHeight());//-100 so can not be hit before being generated
         }catch(Exception e){
@@ -61,4 +67,10 @@ public class Arrow extends Entity{
         return true;
     }
     public int calculateDMG(){return this.speed*10;}
+
+    //getters
+    public Position getPosition(){return this.position;}
+    public BufferedImage getImage(){return this.image;}
+
 }
+
