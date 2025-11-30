@@ -32,7 +32,7 @@ public class App extends Application {
         root = new Group();
         scene = new Scene(root, 640, 480);
         setTitle(stage);
-
+ 
         Context context = new Context();
 
         // ensure Boat exists before Map.calcNextTile() uses it
@@ -40,6 +40,20 @@ public class App extends Application {
         context.getBoat().setSailDirection(Math.PI / 2);
         context.getBoat().setWindDirection(Math.PI / 2);
         context.setMap(new Map(context));
+
+        //create 
+        Arrow arrow = new Arrow(10);
+        arrow.setPosition(new Position(100,100));
+        java.net.URL imgUrl = getClass().getResource("/org/hack10/resources/arrow.png");
+        if (imgUrl == null) {
+            System.err.println("ERROR: /org/hack10/resources/arrow.png not found on classpath; using placeholder.");
+        }
+        ImageView arrow = new ImageView(imgUrl == null ? new Image("https://via.placeholder.com/50") : new Image(imgUrl.toExternalForm()));
+        arrow.setFitWidth(50);
+        arrow.setFitHeight(50);
+        arrow.setX(context.getArrow().getPosition().x);
+        arrow.setY(context.getArrow().getPosition().y);
+        root.getChildren().add(arrow);
 
         // Getting current tile
         background = new ImageView(context.getMap().getCurrentTile().getImage());
@@ -49,11 +63,11 @@ public class App extends Application {
         root.getChildren().add(background);
 
         // safe resource load
-        java.net.URL imgUrl = getClass().getResource("/org/hack10/TopDown.png");
-        if (imgUrl == null) {
+        java.net.URL imgUrl2 = getClass().getResource("/org/hack10/TopDown.png");
+        if (imgUrl2 == null) {
             System.err.println("ERROR: /org/hack10/TopDown.png not found on classpath; using placeholder.");
         }
-        Image icon = imgUrl == null ? new Image("https://via.placeholder.com/64") : new Image(imgUrl.toExternalForm());
+        Image icon = imgUrl2 == null ? new Image("https://via.placeholder.com/64") : new Image(imgUrl2.toExternalForm());
         ImageView ship = new ImageView(icon);
         ship.setFitWidth(150);
         ship.setFitHeight(150);

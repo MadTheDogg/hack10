@@ -26,11 +26,13 @@ public class Context {
     private Boat boat;
     private List<Tile> possibleTiles;
     private List<Monster> possibleMonsters;
+    private Arrow arrow;
     
     public Context() {
         possibleTiles = new ArrayList<>();
         possibleMonsters = new ArrayList<>();
         readJSON(Context.class.getResourceAsStream("/org/hack10/config/Tiles.json"));
+
     }
 
     private void readJSON(InputStream stream) {
@@ -80,8 +82,10 @@ public class Context {
     public List<Tile> getPossibleTiles() { return possibleTiles; }
     public Boat getBoat() { return boat; }
     public Map getMap() { return map; }
+    public Arrow getArrow() { return arrow; }
 
     //Setters
     public void setMap(Map map) { this.map = map; }
     public void setBoat(Boat boat) { this.boat = boat; } 
+    public void setArrow(Arrow arrow) { this.arrow = arrow; }
 }
