@@ -21,9 +21,16 @@ public class Map {
 
     private void calcNextTile(Context context) {
         //Randomly generate a number to select from the tile calculation array
-        int tileNum = generator.nextInt(1);
+        int tileNum = generator.nextInt(context.getPossibleTiles().size());
         currentTile = context.getPossibleTiles().get(tileNum);
         map.add(currentTile);
+        context.setMap(this);
+
+        if (context.getBoat() != null) {
+            Boat newBoat = context.getBoat();
+            newBoat.move(new Position(50, 415));
+            context.setBoat(newBoat);
+        }
 
         //Will need to add entity, resource, building spawning
     }
@@ -35,6 +42,9 @@ public class Map {
 
     //Public methods
     public boolean isValidMove(Context context) {
+        if (currentTile.isEnd(context)) {
+            calcNextTile(context);
+        }
         switch (currentTile.canBeTravelled(context)) {
             //-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
             case -1 : return false;
@@ -47,7 +57,7 @@ public class Map {
             case 3: {
                 break;
             }
-            default : calcNextTile(context); break;
+            default : break;
         }
         return true;
     }

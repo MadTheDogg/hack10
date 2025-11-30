@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
-
+import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 
 
@@ -18,10 +18,11 @@ public class Tile{
     private Image image;
     private BufferedImage hitbox;//white and black image for hitbox - white is allowed, black is not - no racial motivations
     private Entity[][] interactables;
+    private ImageView background;
 
     //constructor
     public Tile(){
-        this.hitbox = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_BINARY);
+        //this.hitbox = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_BINARY);
         this.interactables = new Entity[32][32];
     }
 
@@ -62,7 +63,19 @@ public class Tile{
         this.interactables[x][y] = entity;
     }
     public Integer canBeTravelled(Context context){//-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
+        if (context == null || context.getBoat() == null) {
+            System.err.println("canBeTravelled: context or boat is null");
+            return 0;
+        }
         Rectangle playerCollision = context.getBoat().getHitbox();
+        if (playerCollision == null) {
+            System.err.println("canBeTravelled: boat hitbox is null");
+            return 0;
+        }
+        if (hitbox == null) {
+            System.err.println("canBeTravelled: tile hitbox image is null");
+            return 0;
+        }
         int [] hitboxColours = hitbox.getRGB(playerCollision.x, playerCollision.y, playerCollision.width, playerCollision.height, null, 0, playerCollision.width);
         for(int colour : hitboxColours){
             if(colour == -16777216){//black ??? - does it go that high?
@@ -90,10 +103,14 @@ public class Tile{
     }
     public Boolean isEnd(Context context){//checks if it is the end of the tile aka move to next one
         Rectangle playerCollision = context.getBoat().getHitbox();
-        if (image.getWidth()<(playerCollision.x+playerCollision.getWidth())){//if top right of hitbox is left of boat aka boat is in next tile
-            return true;
-        }else{
-            return false;
-        }
+        if (playerCollision.x >= image.getWidth() - (2 * playerCollision.width) - 10 ) return true;
+        else return false;
+    }
+
+    public ImageView getBackground() {
+        return background;
+    }
+    public void setBackground(ImageView background) {
+        this.background = background;
     }
 }

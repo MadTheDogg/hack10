@@ -38,6 +38,7 @@ public class App extends Application {
         ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
         background.fitWidthProperty().bind(scene.widthProperty());
         background.fitHeightProperty().bind(scene.heightProperty());
+        context.getMap().getCurrentTile().setBackground(background);
         root.getChildren().add(background);
 
         // safe resource load
@@ -80,31 +81,48 @@ public class App extends Application {
                 }
                 double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
                 lastTime[0] = now;
-
-                double nx = ship.getX() + Math.cos(direction) * SPEED * deltaSeconds;
-                double ny = ship.getY() + Math.sin(direction) * SPEED * deltaSeconds;
+                Position pos = context.getBoat().getPos();
+                double nx = pos.x + Math.cos(direction) * SPEED * deltaSeconds;
+                double ny = pos.y + Math.sin(direction) * SPEED * deltaSeconds;
 
                 double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
                 double maxY = scene.getHeight() - ship.getBoundsInLocal().getHeight();
+
                 if (nx < 0) nx = 0;
                 if (ny < 0) ny = 0;
                 if (nx > maxX) nx = maxX;
                 if (ny > maxY) ny = maxY;
 
                 if (context.getMap().isValidMove(context)) {
-                    ship.setX(nx);
-                    ship.setY(ny);
-                    context.getBoat().move(new Position((int)nx, (int)ny));
+                    //ship.setX(nx);
+                    //ship.setY(ny);
+                    context.getBoat().move(new Position(nx, ny));
                 }
                 else {
-                    ship.setX(500);
-                    ship.setY(500);
-                    context.getBoat().move(new Position(500, 500));
+                    //ship.setX(500);
+                    //ship.setY(500);
+                    //context.getBoat().move(new Position(500, 500));
                 }
+
+                ship.setX(pos.x);
+                ship.setY(pos.y);
 
                 double angle = Math.toDegrees(direction);
                 ship.setRotate(angle);
                 context.getBoat().angleMove(angle);
+
+                if (background != context.getMap().getCurrentTile().getBackground()) {
+                    root.getChildren().remove(background);
+
+                    ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
+                    background.fitWidthProperty().bind(scene.widthProperty());
+                    background.fitHeightProperty().bind(scene.heightProperty());
+                    root.getChildren().add(background);
+                    context.getMap().getCurrentTile().setBackground(background);
+
+                    background.toBack();
+                    ship.toFront();
+                }
             }
         };
         anim.start();

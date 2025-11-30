@@ -14,10 +14,10 @@ public class Boat extends Entity {
     {
         pos = position;
         angle = 0;
+        this.hitbox = new Rectangle((int) position.x, (int) position.y, 100, 100);
 
         try {
             this.image = ImageIO.read(getClass().getResourceAsStream("../../../resources/TopDown.png"));
-            this.hitbox = new Rectangle(position.x, position.y, 100, 100);
         } catch(Exception e){
             System.err.println("Error loading boat image: " + e.getMessage());
         }
@@ -29,7 +29,7 @@ public class Boat extends Entity {
     //movers
     public void move(Position position) { 
         pos = new Position(position.x, position.y); 
-        this.hitbox.setLocation(position.x, position.y);
+        this.hitbox.setLocation((int)position.x, (int)position.y);
     } 
     
     public void angleMove(double angle){

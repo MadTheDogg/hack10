@@ -21,14 +21,14 @@ public class Arrow extends Entity{
     }
     public void setPosition(Position position){
         this.position=position;
-        this.hitbox.setLocation(position.x,position.y);
+        this.hitbox.setLocation((int) position.x,(int) position.y);
     }
     public boolean move(){//returns false if arrow runs out of speed of hits something
         if(this.speed<=0){
             return false;
         }
         
-        this.hitbox.setLocation(this.position.x,this.position.y);
+        this.hitbox.setLocation((int) this.position.x, (int) this.position.y);
         this.speed--;
         this.position.x+=speed;
         return true;
