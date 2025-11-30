@@ -23,7 +23,7 @@ public class Boat extends Entity {
         } catch(Exception e){
             System.err.println("Error loading boat image: " + e.getMessage());
         }
-        this.windDirection = windDirection;
+        this.windDirection = 0.0;
         this.sailDirection = sailDirection;
     }
 
