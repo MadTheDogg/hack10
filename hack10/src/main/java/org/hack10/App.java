@@ -99,9 +99,6 @@ public class App extends Application {
         windParticle.setFitHeight(100);
         windParticle.setX(150);
         windParticle.setY(75);
-        
-
-
 
         context.setBoat(new Boat(new Position(50, 415)));
         context.getBoat().setSailDirection(Math.PI / 2);
@@ -167,7 +164,7 @@ public class App extends Application {
                     double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
                     lastTime[0] = now;
                     speed = 50*((2*Math.PI) - Math.abs(context.getBoat().getWindDirection() - context.getBoat().getSailDirection()));
-                double nx = pos.x + Math.cos(direction) * speed * deltaSeconds;
+                    double nx = pos.x + Math.cos(direction) * speed * deltaSeconds;
                     double ny = pos.y + Math.sin(direction) * speed * deltaSeconds;
 
                     double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();

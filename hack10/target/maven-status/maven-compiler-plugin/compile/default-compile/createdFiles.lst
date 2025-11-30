@@ -1,5 +1,6 @@
 org\hack10\App$2.class
 org\hack10\entities\Balistae.class
+org\hack10\entities\Node.class
 module-info.class
 org\hack10\entities\Arrow.class
 org\hack10\entities\Tile.class

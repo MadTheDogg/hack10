@@ -26,11 +26,15 @@ public class Tile{
 
     private String imagePath, hitPath;
     public boolean moved = false;
+    private List<Node> nodes;
+    private int nIndex;
 
     //constructor
-    public Tile(){
+    public Tile(List<Node> nodes){
         //this.hitbox = new BufferedImage(32, 32, BufferedImage.TYPE_BYTE_BINARY);
-        this.interactables = new ArrayList<>();     
+        this.interactables = new ArrayList<>();
+        this.nodes = nodes;     
+        nIndex = 0;
     }
 
     //getters
@@ -182,9 +186,13 @@ public class Tile{
     }
 
     public Tile copy() {
-        Tile newTile = new Tile();
+        Tile newTile = new Tile(this.nodes);
         newTile.setImage(this.imagePath);
         newTile.setHitbox(this.hitPath);
         return newTile;
+    }
+
+    public List<Node> getNodes() {
+        return nodes;
     }
 }

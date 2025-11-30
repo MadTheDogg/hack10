@@ -48,14 +48,11 @@ public class Map {
     }
 
     private void setupMonster(Context context) {
-        List<Position> validPixels = currentTile.findWhitePixels();
-        generator = new Random();
-        for (int i = 0; i < 5; i++) {
-            // Use a prototype from context but create a new instance for each spawn
+        List<Node> currentNodes = currentTile.getNodes();
+        for (Node n : currentNodes) {
             Monster prototype = context.getPossibleMonsters().get(0); //temporary prototype
             Monster monster = prototype.copy();
-            int posNum = generator.nextInt(validPixels.size());
-            Position pos = validPixels.get(posNum);
+            Position pos = n.getPosition();
             monster.setPosition(pos);
             currentTile.addInteractable(monster);
         }
