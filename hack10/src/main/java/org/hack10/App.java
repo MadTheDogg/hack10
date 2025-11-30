@@ -152,7 +152,7 @@ public class App extends Application {
                     double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
                     lastTime[0] = now;
                     speed = 50*((2*Math.PI) - Math.abs(context.getBoat().getWindDirection() - context.getBoat().getSailDirection()));
-                double nx = pos.x + Math.cos(direction) * speed * deltaSeconds;
+                    double nx = pos.x + Math.cos(direction) * speed * deltaSeconds;
                     double ny = pos.y + Math.sin(direction) * speed * deltaSeconds;
 
                     double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
@@ -168,9 +168,29 @@ public class App extends Application {
                     ship.setX(pos.y);
                 }
                 else {
-                    //ship.setX(500);
-                    //ship.setY(500);
-                    //context.getBoat().move(new Position(500, 500));                    
+
+                    double bx = pos.x;
+                    double by = pos.y;
+                    double bounceDistance = 10;
+                    double reversedDir = direction + Math.PI;
+                    double pushX = bx + Math.cos(reversedDir) * bounceDistance;
+                    double pushY = by + Math.sin(reversedDir) * bounceDistance;
+                    if (context.getMap().isBorder(context, new Position(pushX, pushY))) {
+                        // try reducing bounce until safe
+                        for (int i = 0; i < 10; i++) {
+                            bounceDistance -= 1;
+                            pushX = bx + Math.cos(reversedDir) * bounceDistance;
+                            pushY = by + Math.sin(reversedDir) * bounceDistance;
+
+                            if (!context.getMap().isBorder(context, new Position(pushX, pushY))) {
+                                break;
+                            }
+                        }
+                    }
+                    context.getBoat().move(new Position(pushX, pushY));
+                    ship.setX(pushX);
+                    ship.setY(pushY);
+                    direction = reversedDir % (2 * Math.PI);        
                 }
                 ship.setX(pos.x);
                 ship.setY(pos.y);

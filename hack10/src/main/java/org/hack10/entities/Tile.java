@@ -72,16 +72,16 @@ public class Tile{
     public Integer canBeTravelled(Context context){//-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
         if (context == null || context.getBoat() == null) {
             System.err.println("canBeTravelled: context or boat is null");
-            return 0;
+            return -2;
         }
         Rectangle playerCollision = context.getBoat().getHitbox();
         if (playerCollision == null) {
             System.err.println("canBeTravelled: boat hitbox is null");
-            return 0;
+            return -2;
         }
         if (hitbox == null) {
             System.err.println("canBeTravelled: tile hitbox image is null");
-            return 0;
+            return -2;
         }
         int [] hitboxColours = hitbox.getRGB(playerCollision.x, playerCollision.y, playerCollision.width, playerCollision.height, null, 0, playerCollision.width);
         for(int colour : hitboxColours){

@@ -1,8 +1,11 @@
 package org.hack10.entities;
 
 import org.hack10.gamestate.*;
+
 import java.util.*;
 import java.io.*;
+
+import javafx.geometry.Pos;
 
 public class Map {
 
@@ -68,6 +71,15 @@ public class Map {
             default : break;
         }
         return true;
+    }
+    public boolean isBorder(Context context,Position newPosition) {//checks if next move will be illegal
+        int [] hitboxColours = currentTile.getHitbox().getRGB((int)newPosition.x, (int)newPosition.y, context.getBoat().getHitbox().width, context.getBoat().getHitbox().height, null, 0, context.getBoat().getHitbox().width);
+        for(int colour : hitboxColours){
+            if(colour == -16777216){//black
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isEnd(Context context) {
