@@ -21,6 +21,8 @@ public class App extends Application {
 
     // moved here so lambdas can mutate it
     private double direction = 0.0;
+    private double speed = 200.0;  // add this
+    private ImageView background;   // add this
 
     private static Scene scene;
     private Group root;
@@ -35,7 +37,7 @@ public class App extends Application {
         context.setMap(new Map(context));
 
         //Getting current tile
-        ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
+        background = new ImageView(context.getMap().getCurrentTile().getImage());
         background.fitWidthProperty().bind(scene.widthProperty());
         background.fitHeightProperty().bind(scene.heightProperty());
         context.getMap().getCurrentTile().setBackground(background);
@@ -52,18 +54,53 @@ public class App extends Application {
         ship.setFitHeight(150);
         ship.setX(50);
         ship.setY(415);
+
+        //wind stuff
+        java.io.InputStream sailStream = getClass().getResourceAsStream("/org/hack10/sail.png");
+        if (sailStream == null) {
+            System.err.println("ERROR: /org/hack10/sail.png not found on classpath");
+        }
+        Image sailIcon = sailStream == null ? new Image("https://via.placeholder.com/50") : new Image(sailStream);
+        ImageView sail = new ImageView(sailIcon);
+        sail.setFitWidth(50);
+        sail.setFitHeight(50);
+        sail.setX(100);
+        sail.setY(100);
+        sail.toFront();
+
+
         context.setBoat(new Boat(new Position(50, 415)));
+        context.getBoat().setWindDirection(0.0);
+        context.getBoat().setSailDirection(0.0);
 
         root.getChildren().add(ship);
-
-        final double SPEED = 200.0; // pixels per second
+        root.getChildren().add(sail);
 
         // Make scene focusable and handle keys
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case D: { direction += Math.PI / 16; break; }
-                case A: { direction -= Math.PI / 16; break; }
-                default: { break; }
+                case D:
+                    direction += Math.PI / 16;
+                    break;
+                case A:
+                    direction -= Math.PI / 16;
+                    break;
+                case LEFT:
+                    if (context.getBoat().getSailDirection() <= 0) {
+                        context.getBoat().setSailDirection(2 * Math.PI);
+                    } else {
+                        context.getBoat().setSailDirection(context.getBoat().getSailDirection() - 0.5);
+                    }
+                    break;
+                case RIGHT:
+                    if (context.getBoat().getSailDirection() >= 2 * Math.PI) {
+                        context.getBoat().setSailDirection(0);
+                    } else {
+                        context.getBoat().setSailDirection(context.getBoat().getSailDirection() + 0.5);
+                    }
+                    break;
+                default:
+                    break;
             }
         });
 
@@ -82,8 +119,9 @@ public class App extends Application {
                 double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
                 lastTime[0] = now;
                 Position pos = context.getBoat().getPos();
-                double nx = pos.x + Math.cos(direction) * SPEED * deltaSeconds;
-                double ny = pos.y + Math.sin(direction) * SPEED * deltaSeconds;
+                speed = 50*((2*Math.PI) - Math.abs(context.getBoat().getWindDirection() - context.getBoat().getSailDirection()));
+                double nx = pos.x + Math.cos(direction) * speed * deltaSeconds;
+                double ny = pos.y + Math.sin(direction) * speed * deltaSeconds;
 
                 double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
                 double maxY = scene.getHeight() - ship.getBoundsInLocal().getHeight();
@@ -94,34 +132,29 @@ public class App extends Application {
                 if (ny > maxY) ny = maxY;
 
                 if (context.getMap().isValidMove(context)) {
-                    //ship.setX(nx);
-                    //ship.setY(ny);
                     context.getBoat().move(new Position(nx, ny));
-                }
-                else {
-                    //ship.setX(500);
-                    //ship.setY(500);
-                    //context.getBoat().move(new Position(500, 500));
                 }
 
                 ship.setX(pos.x);
                 ship.setY(pos.y);
+                sail.setX(pos.x + 40);
+                sail.setY(pos.y + 50);
 
                 double angle = Math.toDegrees(direction);
                 ship.setRotate(angle);
+                sail.setRotate(Math.toDegrees(context.getBoat().getSailDirection()));
                 context.getBoat().angleMove(angle);
 
                 if (background != context.getMap().getCurrentTile().getBackground()) {
                     root.getChildren().remove(background);
-
-                    ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
+                    background = new ImageView(context.getMap().getCurrentTile().getImage());
                     background.fitWidthProperty().bind(scene.widthProperty());
                     background.fitHeightProperty().bind(scene.heightProperty());
                     root.getChildren().add(background);
                     context.getMap().getCurrentTile().setBackground(background);
 
                     background.toBack();
-                    ship.toFront();
+                    sail.toFront();
                 }
             }
         };
