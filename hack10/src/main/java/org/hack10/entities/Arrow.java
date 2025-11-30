@@ -27,10 +27,12 @@ public class Arrow extends Entity{
         if(this.speed<=0){
             return false;
         }
-        
         this.hitbox.setLocation((int) this.position.x, (int) this.position.y);
         this.speed--;
         this.position.x+=speed;
         return true;
+    }
+    public int calculateDMG(){
+        return this.speed*10;
     }
 }
