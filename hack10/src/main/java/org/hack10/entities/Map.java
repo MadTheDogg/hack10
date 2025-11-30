@@ -24,7 +24,8 @@ public class Map {
 
     private void calcFirstTile(Context context) {
         int tileNum = generator.nextInt(context.getPossibleTiles().size());
-        currentTile = context.getPossibleTiles().get(tileNum);
+        currentTile = context.getPossibleTiles().get(tileNum).copy();
+        setupMonster(context);
         map.add(currentTile);
         context.setMap(this);
     }
@@ -34,7 +35,7 @@ public class Map {
         context.getBoat().move(new Position(50, 450));
 
         int tileNum = generator.nextInt(context.getPossibleTiles().size());
-        currentTile = context.getPossibleTiles().get(tileNum);
+        currentTile = context.getPossibleTiles().get(tileNum).copy();
         map.add(currentTile);
         context.setMap(this);
         context.getBoat().setWindDirection(generator.nextDouble() * Math.PI);
@@ -42,7 +43,22 @@ public class Map {
         for (Tile t : context.getPossibleTiles()){
             t.moved = false;
         }
+        setupMonster(context);
         //Will need to add entity, resource, building spawning
+    }
+
+    private void setupMonster(Context context) {
+        List<Position> validPixels = currentTile.findWhitePixels();
+        generator = new Random();
+        for (int i = 0; i < 5; i++) {
+            // Use a prototype from context but create a new instance for each spawn
+            Monster prototype = context.getPossibleMonsters().get(0); //temporary prototype
+            Monster monster = prototype.copy();
+            int posNum = generator.nextInt(validPixels.size());
+            Position pos = validPixels.get(posNum);
+            monster.setPosition(pos);
+            currentTile.addInteractable(monster);
+        }
     }
 
     //Getters
@@ -57,13 +73,13 @@ public class Map {
             case -1 : return false;
             case -2: return false;
             case 1: {
-                break;
+                return false;
             }
             case 2: {
-                break;
+                return false;
             }
             case 3: {
-                break;
+                return false;
             }
             default : break;
         }

@@ -5,6 +5,7 @@ import java.io.File;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
+import java.util.*;
 
 public class Arrow extends Entity{
     int speed;
@@ -48,18 +49,16 @@ public class Arrow extends Entity{
                 return false;
             }
         }   
-        Entity[][] interactables = context.getMap().getCurrentTile().getInteractables();
-        for (int i=0;i<interactables.length;i++){//check if boat hitbox hits an interactable hitbox
-            for(int j=0;j<interactables[i].length;j++){
-                Entity entity = interactables[i][j];
-                if(entity != null){
-                    Rectangle entityHitbox = entity.getHitbox();
-                    if(this.hitbox.intersects(entityHitbox)){
-                        return false;
-                    }
+        List<Entity> interactables = context.getMap().getCurrentTile().getInteractables();
+        for (Entity e : interactables) {
+            if(e != null){
+                Rectangle entityHitbox = e.getHitbox();
+                if(this.hitbox.intersects(entityHitbox)){
+                    return false;
                 }
             }
-        }return true;
+        }
+        return true;
     }
     public int calculateDMG(){return this.speed*10;}
 }

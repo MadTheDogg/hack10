@@ -19,7 +19,9 @@
     ],
     [
         {
-            "imagePath":""
+            "imagePath":"/org/hack10/monsters/dave.png",
+            "health":50,
+            "damage":10
         }
     ]
 ]
