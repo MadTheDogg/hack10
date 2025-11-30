@@ -3,47 +3,47 @@
         {
             "imagePath":"/org/hack10/landscape1.png",
             "hitboxPath":"/org/hack10/landscape1-hitbox.png",
-            "nodes":[{"x":250, "y":900}, {"x":245, "y":350}]
+            "nodes":[{"x":450, "y":450}, {"x":900, "y":550}]
         },
         {
             "imagePath":"/org/hack10/landscape2.png",
             "hitboxPath":"/org/hack10/landscape2-hitbox.png",
-            "nodes":[{"x":250, "y":2800}, {"x":245, "y":350}]
+            "nodes":[{"x":500, "y":500}, {"x":600, "y":350}, {"x":700, "y":450}]
         },
         {
             "imagePath":"/org/hack10/landscape3.png",
             "hitboxPath":"/org/hack10/landscape3-hitbox.png",
-            "nodes":[{"x":250, "y":700}, {"x":245, "y":350}]
+            "nodes":[{"x":300, "y":700}, {"x":900, "y":300}, {"x":600, "y":500}]
         },
         {
             "imagePath":"/org/hack10/landscape4.png",
             "hitboxPath":"/org/hack10/landscape4-hitbox.png",
-            "nodes":[{"x":250, "y":600}, {"x":245, "y":350}]
+            "nodes":[{"x":800, "y":425}]
         },
         {
             "imagePath":"/org/hack10/landscape7.png",
             "hitboxPath":"/org/hack10/landscape7-hitbox.png",
-            "nodes":[{"x":250, "y":400}, {"x":245, "y":350}]
+            "nodes":[{"x":400, "y":800}, {"x":600, "y":350}]
         },
         {
             "imagePath":"/org/hack10/landscape8.png",
             "hitboxPath":"/org/hack10/landscape8-hitbox.png",
-            "nodes":[{"x":250, "y":300}, {"x":245, "y":350}]
+            "nodes":[{"x":800, "y":800}, {"x":200, "y":200}, {"x":500, "y":500}]
         },
         {
             "imagePath":"/org/hack10/landscape9.png",
             "hitboxPath":"/org/hack10/landscape9-hitbox.png",
-            "nodes":[{"x":250, "y":200}, {"x":245, "y":350}]
+            "nodes":[{"x":300, "y":200}, {"x":400, "y":350}, {"x":500, "y":500} ,{"x":900, "y":100}]
         },
         {
             "imagePath":"/org/hack10/landscape10.png",
             "hitboxPath":"/org/hack10/landscape10-hitbox.png",
-            "nodes":[{"x":250, "y":100}, {"x":245, "y":350}]
+            "nodes":[{"x":425, "y":700}]
         },
         {
             "imagePath":"/org/hack10/landscape11.png",
             "hitboxPath":"/org/hack10/landscape11-hitbox.png",
-            "nodes":[{"x":250, "y":200}, {"x":245, "y":350}]
+            "nodes":[{"x":250, "y":400}, {"x":800, "y":200}]
         }
     ],
     [
