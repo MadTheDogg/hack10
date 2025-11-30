@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 import org.hack10.gamestate.*;
+import org.hack10.entities.*;
 
 import java.awt.Rectangle;
 import java.io.FileInputStream;
@@ -104,6 +105,7 @@ public class Tile{
                 if(playerCollision.intersects(entityHitbox)){
                     //change based on entity type;;
                     if(e instanceof Monster){
+                        context.getBoat().loseHealth(((Monster) e).getDamage());//boat loses health on monster collision
                         return 1;
                     }else if(e instanceof Resource){
                         return 2;

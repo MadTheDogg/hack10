@@ -10,6 +10,7 @@ public class Boat extends Entity {
     private double angle;
     private double windDirection;
     private double sailDirection;
+    private int health;
 
     //Constructor
     public Boat(Position position)
@@ -24,7 +25,7 @@ public class Boat extends Entity {
             System.err.println("Error loading boat image: " + e.getMessage());
         }
         this.windDirection = 0.0;
-        this.sailDirection = sailDirection;
+        health = 100;
     }
 
     //Getters
@@ -60,5 +61,11 @@ public class Boat extends Entity {
     
     public void angleMove(double angle){
         this.angle = angle;
+    }
+    public void loseHealth(int damage){//add a method for when boat dies
+        this.health -= damage;
+        if(this.health < 0){
+            this.health = 0;
+        }
     }
 }
