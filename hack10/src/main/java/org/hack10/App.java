@@ -21,6 +21,8 @@ public class App extends Application {
 
     // moved here so lambdas can mutate it
     private double direction = 0.0;
+    private double speed = 200.0;  // add this
+    private ImageView background;   // add this
 
     private static Scene scene;
     private Group root;
@@ -32,10 +34,15 @@ public class App extends Application {
         setTitle(stage);
 
         Context context = new Context();
+
+        // ensure Boat exists before Map.calcNextTile() uses it
+        context.setBoat(new Boat(new Position(50, 415)));
+        context.getBoat().setSailDirection(Math.PI / 2);
+        context.getBoat().setWindDirection(Math.PI / 2);
         context.setMap(new Map(context));
 
-        //Getting current tile
-        ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
+        // Getting current tile
+        background = new ImageView(context.getMap().getCurrentTile().getImage());
         background.fitWidthProperty().bind(scene.widthProperty());
         background.fitHeightProperty().bind(scene.heightProperty());
         context.getMap().getCurrentTile().setBackground(background);
@@ -52,18 +59,68 @@ public class App extends Application {
         ship.setFitHeight(150);
         ship.setX(50);
         ship.setY(415);
+
+        //wind stuff
+        java.io.InputStream sailStream = getClass().getResourceAsStream("/org/hack10/sail.png");
+        if (sailStream == null) {
+            System.err.println("ERROR: /org/hack10/sail.png not found on classpath");
+        }
+        Image sailIcon = sailStream == null ? new Image("https://via.placeholder.com/50") : new Image(sailStream);
+        ImageView sail = new ImageView(sailIcon);
+        sail.setFitWidth(50);
+        sail.setFitHeight(50);
+        sail.setX(100);
+        sail.setY(100);
+        sail.toFront();
+
+        //wind image specifically
+        java.io.InputStream windStream = getClass().getResourceAsStream("/org/hack10/windparticle.png");
+        if (windStream == null) {
+            System.err.println("ERROR: /org/hack10/windparticle.png not found on classpath");
+        }
+        Image windIcon = windStream == null ? new Image("https://via.placeholder.com/20") : new Image(windStream);
+        ImageView windParticle = new ImageView(windIcon);
+        windParticle.setFitWidth(100);
+        windParticle.setFitHeight(100);
+        windParticle.setX(150);
+        windParticle.setY(75);
+        
+
+
+
         context.setBoat(new Boat(new Position(50, 415)));
+        context.getBoat().setSailDirection(Math.PI / 2);
+        context.getBoat().setWindDirection(Math.PI / 2);
 
         root.getChildren().add(ship);
-
-        final double SPEED = 200.0; // pixels per second
+        root.getChildren().add(sail);
+        root.getChildren().add(windParticle);
 
         // Make scene focusable and handle keys
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case D: { direction += Math.PI / 16; break; }
-                case A: { direction -= Math.PI / 16; break; }
-                default: { break; }
+                case D:
+                    direction += Math.PI / 16;
+                    break;
+                case A:
+                    direction -= Math.PI / 16;
+                    break;
+                case LEFT:
+                    if (context.getBoat().getSailDirection() <= 0) {
+                        context.getBoat().setSailDirection(2 * Math.PI);
+                    } else {
+                        context.getBoat().setSailDirection(context.getBoat().getSailDirection() - 0.5);
+                    }
+                    break;
+                case RIGHT:
+                    if (context.getBoat().getSailDirection() >= 2 * Math.PI) {
+                        context.getBoat().setSailDirection(0);
+                    } else {
+                        context.getBoat().setSailDirection(context.getBoat().getSailDirection() + 0.5);
+                    }
+                    break;
+                default:
+                    break;
             }
         });
 
@@ -94,8 +151,9 @@ public class App extends Application {
 
                     double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
                     lastTime[0] = now;
-                    double nx = pos.x + Math.cos(direction) * SPEED * deltaSeconds;
-                    double ny = pos.y + Math.sin(direction) * SPEED * deltaSeconds;
+                    speed = 50*((2*Math.PI) - Math.abs(context.getBoat().getWindDirection() - context.getBoat().getSailDirection()));
+                double nx = pos.x + Math.cos(direction) * speed * deltaSeconds;
+                    double ny = pos.y + Math.sin(direction) * speed * deltaSeconds;
 
                     double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
                     double maxY = scene.getHeight() - ship.getBoundsInLocal().getHeight();
@@ -116,9 +174,13 @@ public class App extends Application {
                 }
                 ship.setX(pos.x);
                 ship.setY(pos.y);
+                sail.setX(pos.x + 40);
+                sail.setY(pos.y + 50);
 
                 double angle = Math.toDegrees(direction);
                 ship.setRotate(angle);
+                sail.setRotate(Math.toDegrees(context.getBoat().getSailDirection()));
+                windParticle.setRotate(Math.toDegrees(context.getBoat().getWindDirection()));
                 context.getBoat().angleMove(angle);
 
                 if (background != context.getMap().getCurrentTile().getBackground()) {
@@ -131,7 +193,7 @@ public class App extends Application {
                     context.getMap().getCurrentTile().setBackground(background);
 
                     background.toBack();
-                    ship.toFront();
+                    sail.toFront();
                 }
             }
         };
@@ -148,8 +210,13 @@ public class App extends Application {
     public void setTitle(Stage stage) {
         // set stage title and icon
         stage.setTitle("Odyssey");
-        Image iconApp = new Image(getClass().getResourceAsStream("/org/hack10/shipicon.png"));
-        stage.getIcons().add(iconApp);
+        java.io.InputStream iconStream = getClass().getResourceAsStream("/org/hack10/shipicon.png");
+        if (iconStream != null) {
+            try { stage.getIcons().add(new Image(iconStream)); }
+            catch (Exception e) { System.err.println("WARN: failed to load icon: " + e.getMessage()); }
+        } else {
+            System.err.println("WARN: /org/hack10/shipicon.png not found on classpath; skipping app icon.");
+        }
         stage.setFullScreen(true);
     }
 
