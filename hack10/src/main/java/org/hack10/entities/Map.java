@@ -37,11 +37,10 @@ public class Map {
         currentTile = context.getPossibleTiles().get(tileNum);
         map.add(currentTile);
         context.setMap(this);
+        context.getBoat().setWindDirection(generator.nextDouble() * Math.PI);
 
-        if (context.getBoat() != null) {
-            Boat newBoat = context.getBoat();
-            newBoat.move(new Position(50, 415));
-            context.setBoat(newBoat);
+        for (Tile t : context.getPossibleTiles()){
+            t.moved = false;
         }
         //Will need to add entity, resource, building spawning
     }
@@ -54,7 +53,7 @@ public class Map {
     //Public methods
     public boolean isValidMove(Context context) {
         switch (currentTile.canBeTravelled(context)) {
-            //-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
+            //-2 is an error , -1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
             case -1 : return false;
             case -2: return false;
             case 1: {

@@ -16,7 +16,7 @@ public class Boat extends Entity {
     {
         pos = position;
         angle = 0;
-        this.hitbox = new Rectangle((int) position.x, (int) position.y, 50, 50);
+        this.hitbox = new Rectangle((int) position.x, (int) position.y, 100, 100);
 
         try {
             this.image = ImageIO.read(getClass().getResourceAsStream("../../../resources/TopDown.png"));
