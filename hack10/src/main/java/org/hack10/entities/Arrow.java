@@ -33,7 +33,7 @@ public class Arrow extends Entity{
         }else{
             this.speed--;
             this.position.x+=speed;
-            this.hitbox.setLocation(this.position.x,this.position.y);
+            this.hitbox.setLocation((int)this.position.x,(int)this.position.y);
             return true;
         }
         
@@ -41,7 +41,7 @@ public class Arrow extends Entity{
         
     }
     public boolean checkCollision(Context context){
-        BufferedImage tileHitbox = context.getGameState().getMap().getCurrentTile().getHitbox();
+        BufferedImage tileHitbox = context.getMap().getCurrentTile().getHitbox();
         int [] hitboxColours = tileHitbox.getRGB(this.hitbox.x, this.hitbox.y, this.hitbox.width, this.hitbox.height, null, 0, this.hitbox.width);
         for(int colour : hitboxColours){
             if(colour == -16777216){//black ??? - does it go that high?

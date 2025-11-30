@@ -55,6 +55,7 @@ public class Map {
         switch (currentTile.canBeTravelled(context)) {
             //-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
             case -1 : return false;
+            case -2: return false;
             case 1: {
                 break;
             }
