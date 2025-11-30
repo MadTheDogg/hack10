@@ -108,7 +108,11 @@ public class Tile{
     }
     public Boolean isEnd(Context context){//checks if it is the end of the tile aka move to next one
         Rectangle playerCollision = context.getBoat().getHitbox();
-        if (playerCollision.x >= image.getWidth() - (2 * playerCollision.width)) return true;
+        System.out.print(playerCollision.x + " | " + (image.getWidth() - (2 * playerCollision.width)) + ", ");
+        if (playerCollision.x >= image.getWidth() - (2 * playerCollision.width)) {
+            System.out.println("Tile.java: Reached end of tile");
+            return true;
+        }
         else return false;
     }
 

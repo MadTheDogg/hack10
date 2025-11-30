@@ -82,7 +82,8 @@ public class App extends Application {
                 }
                 Position pos = context.getBoat().getPos();
 
-                if (context.getMap().isEnd()) {
+                if (context.getMap().isEnd(context)) {
+                    System.out.println("App.Java : Reached end of tile, calculating next tile.");
                     pos = context.getBoat().getPos();
                     ship.setX(pos.x);
                     ship.setX(pos.y);

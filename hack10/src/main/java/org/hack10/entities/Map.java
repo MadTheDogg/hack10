@@ -38,6 +38,10 @@ public class Map {
         map.add(currentTile);
         context.setMap(this);
         System.out.println("Moving boat to start of new tile");
+
+        for (Tile t: context.getPossibleTiles()) {
+            t.moved = false;
+        }
         //Will need to add entity, resource, building spawning
     }
 
@@ -65,10 +69,11 @@ public class Map {
         return true;
     }
 
-    public boolean isEnd() {
+    public boolean isEnd(Context context) {
         if (!currentTile.moved && currentTile.isEnd(context)) {
             currentTile.moved = true;
-            System.out.println("Calculating new tile...");
+            
+            System.out.println("Map.java: Tile end reached, calculating next tile.");
             calcNextTile(context);
             return true;
         } return false;
