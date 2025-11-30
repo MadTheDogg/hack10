@@ -74,7 +74,7 @@ public class Map {
             case -2: return false;
             case 1: {
                 context.getBoat().damage(10);
-                break;
+                return false;
             }
             case 2: {
                 return false;

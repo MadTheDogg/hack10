@@ -45,18 +45,19 @@ public class App extends Application {
         context.setMap(new Map(context));
 
         //create 
-        Arrow arrow = new Arrow(10);
-        arrow.setPosition(new Position(100,100));
-        java.net.URL imgUrl = getClass().getResource("/org/hack10/resources/arrow.png");
-        if (imgUrl == null) {
-            System.err.println("ERROR: /org/hack10/resources/arrow.png not found on classpath; using placeholder.");
-        }
-        ImageView arrow = new ImageView(imgUrl == null ? new Image("https://via.placeholder.com/50") : new Image(imgUrl.toExternalForm()));
-        arrow.setFitWidth(50);
-        arrow.setFitHeight(50);
-        arrow.setX(context.getArrow().getPosition().x);
-        arrow.setY(context.getArrow().getPosition().y);
-        root.getChildren().add(arrow);
+        //Arrow arrow = new Arrow(10);
+        //arrow.setPosition(new Position(100,100));
+        //java.net.URL imgUrl = getClass().getResource("/org/hack10/resources/arrow.png");
+        //if (imgUrl == null) {
+        //    System.err.println("ERROR: /org/hack10/resources/arrow.png not found on classpath; using placeholder.");
+        //}
+        /*
+        ImageView arrowView = new ImageView(imgUrl == null ? new Image("https://via.placeholder.com/50") : new Image(imgUrl.toExternalForm()));
+        arrowView.setFitWidth(50);
+        arrowView.setFitHeight(50);
+        arrowView.setX(context.getArrow().getPosition().x);
+        arrowView.setY(context.getArrow().getPosition().y);
+        root.getChildren().add(arrowView); */
 
         // Getting current tile
         background = new ImageView(context.getMap().getCurrentTile().getImage());
@@ -146,6 +147,10 @@ public class App extends Application {
                         context.getBoat().setSailDirection(context.getBoat().getSailDirection() + 0.5);
                     }
                     break;
+                case ENTER:
+                    if (context.getBoat().getHealth() <= 0) {
+                        Platform.exit();
+                    }
                 default:
                     break;
             }
@@ -172,13 +177,13 @@ public class App extends Application {
                 Position pos = context.getBoat().getPos();
 
                 if (context.getBoat().getHealth() <= 0) {
-                    Label gameOver = new Label("GOON!");
+                    Label gameOver = new Label("GAME OVER");
                     gameOver.setLayoutX(scene.getWidth() / 2 - 50);
                     gameOver.setLayoutY(scene.getHeight() / 2 - 25);
                     gameOver.setPrefSize(scene.getWidth(), scene.getHeight());
+                    gameOver.setStyle("-fx-font-size: 48px; -fx-text-fill: red;");
                     root.getChildren().add(gameOver);
                     this.stop();
-                    Platform.exit();
                 }
 
                 if (context.getMap().isEnd(context)) {
