@@ -37,11 +37,10 @@ public class Map {
         currentTile = context.getPossibleTiles().get(tileNum);
         map.add(currentTile);
         context.setMap(this);
+        context.getBoat().setWindDirection(generator.nextDouble() * Math.PI);
 
-        if (context.getBoat() != null) {
-            Boat newBoat = context.getBoat();
-            newBoat.move(new Position(50, 415));
-            context.setBoat(newBoat);
+        for (Tile t : context.getPossibleTiles()) {
+            t.moved = false;
         }
         //Will need to add entity, resource, building spawning
     }
