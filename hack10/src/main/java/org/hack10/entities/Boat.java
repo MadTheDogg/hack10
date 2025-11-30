@@ -8,6 +8,8 @@ import java.awt.Rectangle;
 public class Boat extends Entity {
     private Position pos;
     private double angle;
+    private double windDirection;
+    private double sailDirection;
 
     //Constructor
     public Boat(Position position)
@@ -21,10 +23,34 @@ public class Boat extends Entity {
         } catch(Exception e){
             System.err.println("Error loading boat image: " + e.getMessage());
         }
+        this.windDirection = 0.0;
+        this.sailDirection = sailDirection;
     }
 
     //Getters
     public Position getPos() { return pos; }
+
+    public double getWindDirection() 
+    { 
+        return windDirection; 
+    }
+
+    public double getSailDirection() 
+    { 
+        return sailDirection; 
+    }
+
+    //Setters
+
+    public void setWindDirection(double windDirection) 
+    { 
+        this.windDirection = windDirection; 
+    }
+
+    public void setSailDirection(double sailDirection) 
+    { 
+        this.sailDirection = sailDirection; 
+    }
 
     //movers
     public void move(Position position) { 
