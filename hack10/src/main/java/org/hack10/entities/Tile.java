@@ -26,7 +26,9 @@ public class Tile{
     public BufferedImage getHitbox() {
         return hitbox;
     }
-
+    public Entity[][] getInteractables() {
+        return interactables;
+    }
     //setters
     public void setImage(String filePath){//turns an image into a buffered image
         try{
