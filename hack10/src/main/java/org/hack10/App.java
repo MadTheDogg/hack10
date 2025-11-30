@@ -15,6 +15,7 @@ import javafx.scene.Group;
 import org.hack10.entities.*;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Label;
 
 /**
  * JavaFX App
@@ -154,6 +155,11 @@ public class App extends Application {
             // optionally handle release
         });
 
+        Label health = new Label("Health: " + context.getBoat().getHealth());
+        health.setLayoutX(10);
+        health.setLayoutY(10);
+        root.getChildren().add(health);
+
         final long[] lastTime = { 0L };
         //Essentially the game loop
         AnimationTimer anim = new AnimationTimer() {
@@ -164,6 +170,16 @@ public class App extends Application {
                     return;
                 }
                 Position pos = context.getBoat().getPos();
+
+                if (context.getBoat().getHealth() <= 0) {
+                    Label gameOver = new Label("GOON!");
+                    gameOver.setLayoutX(scene.getWidth() / 2 - 50);
+                    gameOver.setLayoutY(scene.getHeight() / 2 - 25);
+                    gameOver.setPrefSize(scene.getWidth(), scene.getHeight());
+                    root.getChildren().add(gameOver);
+                    this.stop();
+                    Platform.exit();
+                }
 
                 if (context.getMap().isEnd(context)) {
                     System.out.println("App.Java : Reached end of tile, calculating next tile.");
@@ -228,6 +244,8 @@ public class App extends Application {
                 sail.setRotate(Math.toDegrees(context.getBoat().getSailDirection()));
                 windParticle.setRotate(Math.toDegrees(context.getBoat().getWindDirection()));
                 context.getBoat().angleMove(angle);
+
+                health.setText("Health: " + context.getBoat().getHealth());
 
                 if (context.getMap().getCurrentTile().moved == false) {
                     root.getChildren().remove(0);
