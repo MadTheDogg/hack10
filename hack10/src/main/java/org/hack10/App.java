@@ -6,16 +6,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
+
 import org.hack10.gamestate.*;
+
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.Group;
+
 import org.hack10.entities.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCombination;
 
 /**
  * JavaFX App
@@ -35,7 +42,8 @@ public class App extends Application {
         root = new Group();
         scene = new Scene(root, 640, 480);
         setTitle(stage);
- 
+        stage.setResizable(false);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         Context context = new Context();
 
         // ensure Boat exists before Map.calcNextTile() uses it
