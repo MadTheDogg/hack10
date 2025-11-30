@@ -72,6 +72,7 @@ public class App extends Application {
         });
 
         final long[] lastTime = { 0L };
+        //Essentially the game loop
         AnimationTimer anim = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -79,31 +80,39 @@ public class App extends Application {
                     lastTime[0] = now;
                     return;
                 }
-                double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
-                lastTime[0] = now;
                 Position pos = context.getBoat().getPos();
-                double nx = pos.x + Math.cos(direction) * SPEED * deltaSeconds;
-                double ny = pos.y + Math.sin(direction) * SPEED * deltaSeconds;
 
-                double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
-                double maxY = scene.getHeight() - ship.getBoundsInLocal().getHeight();
-
-                if (nx < 0) nx = 0;
-                if (ny < 0) ny = 0;
-                if (nx > maxX) nx = maxX;
-                if (ny > maxY) ny = maxY;
-
-                if (context.getMap().isValidMove(context)) {
+                if (context.getMap().isEnd()) {
+                    pos = context.getBoat().getPos();
+                    ship.setX(pos.x);
+                    ship.setX(pos.y);
+                }
+                else if (context.getMap().isValidMove(context)) {
                     //ship.setX(nx);
                     //ship.setY(ny);
+
+                    double deltaSeconds = (now - lastTime[0]) / 1_000_000_000.0;
+                    lastTime[0] = now;
+                    double nx = pos.x + Math.cos(direction) * SPEED * deltaSeconds;
+                    double ny = pos.y + Math.sin(direction) * SPEED * deltaSeconds;
+
+                    double maxX = scene.getWidth() - ship.getBoundsInLocal().getWidth();
+                    double maxY = scene.getHeight() - ship.getBoundsInLocal().getHeight();
+
+                    if (nx < 0) nx = 0;
+                    if (ny < 0) ny = 0;
+                    if (nx > maxX) nx = maxX;
+                    if (ny > maxY) ny = maxY;
+
                     context.getBoat().move(new Position(nx, ny));
+                    ship.setX(pos.x);
+                    ship.setX(pos.y);
                 }
                 else {
                     //ship.setX(500);
                     //ship.setY(500);
-                    //context.getBoat().move(new Position(500, 500));
+                    //context.getBoat().move(new Position(500, 500));                    
                 }
-
                 ship.setX(pos.x);
                 ship.setY(pos.y);
 
@@ -112,7 +121,7 @@ public class App extends Application {
                 context.getBoat().angleMove(angle);
 
                 if (background != context.getMap().getCurrentTile().getBackground()) {
-                    root.getChildren().remove(background);
+                    root.getChildren().remove(0);
 
                     ImageView background = new ImageView(context.getMap().getCurrentTile().getImage());
                     background.fitWidthProperty().bind(scene.widthProperty());
@@ -125,8 +134,10 @@ public class App extends Application {
                 }
             }
         };
+        //Starts the timer
         anim.start();
 
+        //Shows the scene
         stage.setScene(scene);
         stage.show();
 

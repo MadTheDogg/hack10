@@ -15,10 +15,6 @@
         {
             "imagePath":"/org/hack10/landscape4.png",
             "hitboxPath":"/org/hack10/landscape4-hitbox.png"
-        },
-        {
-            "imagePath":"/org/hack10/landscape5.png",
-            "hitboxPath":"/org/hack10/landscape5-hitbox.png"
         }
     ],
     [

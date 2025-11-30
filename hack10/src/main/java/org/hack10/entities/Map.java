@@ -10,28 +10,34 @@ public class Map {
     private List<Tile> map;
     private Random generator;
     private Tile currentTile;
+    private boolean reloading;
 
     public Map(Context context) {
         this.context = context;
         map = new ArrayList<>();
         generator = new Random();
 
-        calcNextTile(context);
+        reloading = false;
+
+        calcFirstTile(context);
     }
 
-    private void calcNextTile(Context context) {
-        //Randomly generate a number to select from the tile calculation array
+    private void calcFirstTile(Context context) {
         int tileNum = generator.nextInt(context.getPossibleTiles().size());
         currentTile = context.getPossibleTiles().get(tileNum);
         map.add(currentTile);
         context.setMap(this);
+    }
 
-        if (context.getBoat() != null) {
-            Boat newBoat = context.getBoat();
-            newBoat.move(new Position(50, 415));
-            context.setBoat(newBoat);
-        }
+    private void calcNextTile(Context context) {
+        //Randomly generate a number to select from the tile calculation array
+        context.getBoat().move(new Position(50, 450));
 
+        int tileNum = generator.nextInt(context.getPossibleTiles().size());
+        currentTile = context.getPossibleTiles().get(tileNum);
+        map.add(currentTile);
+        context.setMap(this);
+        System.out.println("Moving boat to start of new tile");
         //Will need to add entity, resource, building spawning
     }
 
@@ -42,9 +48,6 @@ public class Map {
 
     //Public methods
     public boolean isValidMove(Context context) {
-        if (currentTile.isEnd(context)) {
-            calcNextTile(context);
-        }
         switch (currentTile.canBeTravelled(context)) {
             //-1 is a border, 0 means normal, 1 is a monster, 2 is resource, 3 is trading outpost
             case -1 : return false;
@@ -60,5 +63,14 @@ public class Map {
             default : break;
         }
         return true;
+    }
+
+    public boolean isEnd() {
+        if (!currentTile.moved && currentTile.isEnd(context)) {
+            currentTile.moved = true;
+            System.out.println("Calculating new tile...");
+            calcNextTile(context);
+            return true;
+        } return false;
     }
 }
